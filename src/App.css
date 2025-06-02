@@ -1,0 +1,752 @@
+
+.app {
+  min-height: 100vh;
+  width: 100vw;
+  background: #f6f8fa;
+  color: #23272f;
+  display: flex;
+  flex-direction: column;
+}
+body {
+  background: #f6f8fa !important;
+  margin: 0;
+  min-height: 100vh;
+}
+.app.dark {
+  background: #1c1e22;
+  color: #e5e6ea;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #4255ff;
+  color: #fff;
+  padding: 16px 24px;
+  box-shadow: 0 2px 8px 0 #23272f10;
+}
+
+.header-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.theme-toggle {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #fff;
+  transition: transform 0.1s;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+
+.main-title {
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+
+
+.grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+  padding: 24px;
+  align-items: start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.card {
+  background: #fff;
+  color: #23272f;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px 0 #23272f15;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  transition: box-shadow 0.15s, background 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.app.dark .card {
+  background: #23272f;
+  color: #e5e6ea;
+  box-shadow: 0 4px 16px 0 #11121350;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.card-address {
+  font-size: 1rem;
+  color: #60697b;
+  margin-bottom: 8px;
+}
+
+.app.dark .card-address {
+  color: #b1b6c3;
+}
+
+.card-description {
+  flex: 1;
+  margin-bottom: 16px;
+}
+.app.dark .details-btn {
+  background: #4badea;
+  color: #fff;
+}
+
+.app.dark .details-btn:hover {
+  background: #4255ff;
+  color: #fff;
+  opacity: 1;
+}
+.details-btn {
+  background: #4255ff;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  opacity: 0.7;
+}
+.details-btn:hover {
+  background: #3043cc;
+  opacity: 1;
+}
+
+.loading {
+  text-align: center;
+  margin-top: 3rem;
+  font-size: 1.2rem;
+}
+
+/* Добавляем сброс стилей для body */
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Добавляем медиа-запрос для мобильных устройств */
+@media (max-width: 480px) {
+  .register-form {
+    padding: 18px 4vw;
+    min-width: 0;
+    width: 96vw;
+    max-width: 98vw;
+  }
+}
+
+  .main-title {
+    font-size: 1.5rem;
+    margin: 1rem auto;
+  }
+
+  .header {
+    padding: 12px 16px;
+  }
+
+.details-page {
+  max-width: 480px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px 0 #23272f15;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+}
+.app.dark .details-page {
+  background: #23272f;
+  color: #e5e6ea;
+}
+.back-btn {
+  background: none;
+  border: none;
+  color: #4255ff;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  text-align: left;
+}
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+.modal-backdrop {
+  position: fixed; left: 0; top: 0; right: 0; bottom: 0;
+  background: #1119c055;
+  z-index: 999;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal {
+  background: #fff; border-radius: 16px; padding: 2rem; min-width: 340px;
+  box-shadow: 0 8px 32px 0 #23272f55;
+  position: relative;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.modal-close {
+  position: absolute; right: 16px; top: 16px;
+  background: none; border: none; font-size: 1.5rem; color: #999; cursor: pointer;
+}
+.modal form {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.modal input {
+  border: 1px solid #ccd; border-radius: 8px; padding: 10px;
+  font-size: 1rem;
+}
+
+.register-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+}
+
+.register-form {
+  background: #fff;
+  padding: 36px 28px 28px 28px;
+  border-radius: 16px;
+  box-shadow: 0 6px 32px 0 #23272f22;
+  width: 100%;
+  max-width: 410px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.register-form h2 {
+  text-align: center;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+
+.form-error {
+  color: #e22;
+  background: #fdeeee;
+  border-radius: 6px;
+  padding: 7px 10px;
+  margin-bottom: -10px;
+  font-size: 1rem;
+  text-align: center;
+}
+.form-success {
+  color: #16a34a;
+  background: #e6fbe8;
+  border-radius: 6px;
+  padding: 7px 10px;
+  margin-bottom: -10px;
+  font-size: 1rem;
+  text-align: center;
+}
+.big-btn {
+  font-size: 1.1rem;
+  padding: 12px 0;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+.register-form input {
+  border: 1.5px solid #dde1e8;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 1rem;
+  background: #fafbfc;
+  color: #23272f;
+  transition: border 0.18s, background 0.18s, color 0.18s;
+}
+
+.register-form input:focus {
+  outline: none;
+  border: 1.5px solid #4255ff;
+  background: #fff;
+  color: #23272f;
+}
+
+.register-form input::placeholder {
+  color: #9ea4b3;
+  opacity: 1;
+}
+
+/* --- ТЁМНАЯ ТЕМА --- */
+.app.dark .register-form input {
+  background: #23272f;
+  color: #f1f3f8;
+  border: 1.5px solid #4255ff;
+}
+
+.app.dark .register-form input:focus {
+  background: #24263a;
+  color: #f1f3f8;
+  border: 1.5px solid #4badea;
+}
+
+.app.dark .register-form input::placeholder {
+  color: #949ec3;
+  opacity: 1;
+}
+
+.register-form input {
+  background: #fff;
+  color: #23272f;
+  border: 1.5px solid #dde1e8;
+  transition: border 0.18s, box-shadow 0.18s;
+}
+
+.register-form input:focus {
+  border: 1.5px solid #4255ff;
+  box-shadow: 0 0 0 2px #4255ff33;
+  background: #fff;
+  color: #23272f;
+}
+
+.register-form input::placeholder {
+  color: #9ea4b3;
+  opacity: 1;
+}
+
+.app.dark .register-form input {
+  background: #fff;
+  color: #23272f;
+  border: 1.5px solid #334;
+}
+.app.dark .register-form input:focus {
+  border: 1.5px solid #4badea;
+  box-shadow: 0 0 0 2px #4badea55;
+  background: #fff;
+  color: #23272f;
+}
+.app.dark .register-form input::placeholder {
+  color: #a2acc2;
+}
+
+.register-form button,
+.big-btn {
+  background: #4255ff;
+  color: #fff;
+  font-weight: 500;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  padding: 14px 0;
+  margin-top: 10px;
+  transition: background 0.14s, color 0.12s;
+  cursor: pointer;
+}
+.register-form button:hover,
+.big-btn:hover {
+  background: #3043cc;
+  color: #fff;
+}
+
+.register-form h2 {
+  color: #23272f;
+  font-size: 2rem;
+}
+.app.dark .register-form h2 {
+  color: #23272f; /* или фирменный, но не серый! */
+}
+.register-form label {
+  color: #4255ff;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+.app.dark .register-form label {
+  color: #4badea;
+}
+
+.register-form {
+  border-radius: 14px;
+  background: #fff;
+}
+.app.dark .register-form {
+  background: #fff;
+}
+
+.user-menu-wrapper {
+  position: relative;
+}
+.user-name-btn {
+  background: #fff;
+  color: #4255ff;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  border: none;
+  transition: background 0.15s;
+}
+.user-name-btn:hover {
+  background: #ebf1fe;
+}
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  top: 110%;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 6px 24px 0 #23272f18;
+  min-width: 160px;
+  z-index: 20;
+  padding: 6px 0;
+  display: flex;
+  flex-direction: column;
+}
+.user-dropdown-item {
+  padding: 12px 18px;
+  color: #23272f;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.user-dropdown-item:hover {
+  background: #e4eaff;
+}
+.app.dark .user-dropdown {
+  background: #23272f;
+  color: #e5e6ea;
+  box-shadow: 0 6px 24px 0 #121217a8;
+}
+.app.dark .user-dropdown-item:hover {
+  background: #343750;
+}
+
+.profile-card {
+  max-width: 420px;
+  margin: 40px auto 32px auto;
+  padding: 32px 24px 30px 24px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px 0 #23272f17;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.app.dark .profile-card {
+  background: #23272f;
+  box-shadow: 0 8px 32px 0 #0d0f171e;
+}
+
+.profile-name {
+  font-size: 2.1rem;
+  font-weight: 600;
+  color: #23272f;
+  margin-bottom: 0;
+}
+
+.app.dark .profile-name {
+  color: #f1f3f8;
+}
+
+.profile-info {
+  width: 100%;
+  text-align: left;
+  color: #444e66;
+  font-size: 1.07rem;
+}
+
+.app.dark .profile-info {
+  color: #b6bfd8;
+}
+
+.profile-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.profile-btn {
+  background: #4255ff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.08rem;
+  padding: 13px 0;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.13s, color 0.13s;
+}
+
+.profile-btn:hover {
+  background: #3043cc;
+}
+
+.logout-btn {
+  background: #fff;
+  color: #f14d4d;
+  border: 1.5px solid #f14d4d;
+}
+
+.logout-btn:hover {
+  background: #f14d4d;
+  color: #fff;
+}
+
+.app.dark .logout-btn {
+  background: #23272f;
+  color: #f14d4d;
+  border-color: #f14d4d;
+}
+
+.app.dark .logout-btn:hover {
+  background: #f14d4d;
+  color: #fff;
+}
+
+.profile-booking-history {
+  width: 100%;
+  margin-top: 24px;
+  background: #f6f8fa;
+  border-radius: 12px;
+  padding: 18px 16px;
+  min-height: 80px;
+}
+
+.app.dark .profile-booking-history {
+  background: #25273d;
+  color: #b1b7cd;
+}
+
+.user-menu-wrapper {
+  position: relative;
+}
+.user-name-btn {
+  background: #fff;
+  color: #4255ff;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  border: none;
+  transition: background 0.15s;
+}
+.user-name-btn:hover {
+  background: #ebf1fe;
+}
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  top: 110%;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 6px 24px 0 #23272f18;
+  min-width: 160px;
+  z-index: 20;
+  padding: 6px 0;
+  display: flex;
+  flex-direction: column;
+}
+.user-dropdown-item {
+  padding: 12px 18px;
+  color: #23272f;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.user-dropdown-item:hover {
+  background: #e4eaff;
+}
+
+.app.dark .user-dropdown {
+  background: #23272f;
+  color: #e5e6ea;
+  box-shadow: 0 6px 24px 0 #121217a8;
+}
+.app.dark .user-dropdown-item {
+  color: #e5e6ea;
+}
+.app.dark .user-dropdown-item:hover {
+  background: #343750;
+}
+.app.dark .user-name-btn {
+  background: #343750;
+  color: #d5dfff;
+}
+.app.dark .user-name-btn:hover {
+  background: #24264c;
+}
+/* Модальное окно — фон */
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(24,28,38,0.35);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: modal-fadein 0.18s;
+}
+@keyframes modal-fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Сама модалка */
+.modal {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px 0 #23272f17;
+  padding: 30px 22px 28px 22px;
+  min-width: 310px;
+  max-width: 370px;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Тёмная тема */
+.app.dark .modal {
+  background: #212337;
+  box-shadow: 0 8px 32px 0 #1313172a;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px; right: 18px;
+  font-size: 2.2rem;
+  color: #adadad;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.13s;
+  line-height: 1;
+}
+.modal-close:hover {
+  color: #4255ff;
+}
+.app.dark .modal-close:hover {
+  color: #f2b356;
+}
+
+/* Стили формы */
+.modal form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal input[type="password"] {
+  width: 100%;
+  font-size: 1.08rem;
+  padding: 11px 10px;
+  border: 1.5px solid #c8cce8;
+  border-radius: 7px;
+  margin-top: 0;
+  margin-bottom: 0;
+  outline: none;
+  background: #f8faff;
+  color: #23272f;
+  transition: border 0.15s, background 0.15s;
+}
+.modal input[type="password"]:focus {
+  border: 1.5px solid #4255ff;
+  background: #fff;
+}
+.app.dark .modal input[type="password"] {
+  background: #181926;
+  border-color: #303259;
+  color: #e5e7f0;
+}
+.app.dark .modal input[type="password"]:focus {
+  border-color: #f2b356;
+  background: #23243c;
+}
+
+.form-error {
+  color: #f14d4d;
+  background: #fff6f6;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 0.99rem;
+  margin-top: 0;
+}
+.app.dark .form-error {
+  color: #f18a8a;
+  background: #301b1b;
+}
+
+.form-success {
+  color: #1c8e3c;
+  background: #ebfff1;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 0.99rem;
+  margin-top: 0;
+}
+.app.dark .form-success {
+  color: #b2ffba;
+  background: #142419;
+}
+
+.big-btn {
+  background: #4255ff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.09rem;
+  padding: 12px 0;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.14s;
+  margin-top: 8px;
+}
+.big-btn:hover {
+  background: #3043cc;
+}
+.profile-avatar-svg {
+  display: block;
+  margin: 0 auto 16px auto;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: 0 2px 16px 0 #4255ff27;
+}
+.app.dark .profile-avatar-svg {
+  box-shadow: 0 2px 16px 0 #23263a77;
+}
