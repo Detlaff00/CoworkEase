@@ -112,10 +112,10 @@ app.get('/bookings/:id', async (req, res) => {
 // Создать бронирование
 app.post('/bookings', async (req, res) => {
     try {
-        const { user_id, worckspace_id, start_time, end_time, status } = req.body;
+        const { user_id, workspace_id, start_time, end_time, status } = req.body;
         const result = await pool.query(
-            'INSERT INTO "Bookings" (user_id, worckspace_id, start_time, end_time, status) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [user_id, worckspace_id, start_time, end_time, status]
+            'INSERT INTO "Bookings" (user_id, workspace_id, start_time, end_time, status) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [user_id, workspace_id, start_time, end_time, status]
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {
@@ -127,10 +127,10 @@ app.post('/bookings', async (req, res) => {
 app.put('/bookings/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const { user_id, worckspace_id, start_time, end_time, status } = req.body;
+        const { user_id, workspace_id, start_time, end_time, status } = req.body;
         const result = await pool.query(
-            'UPDATE "Bookings" SET user_id=$1, worckspace_id=$2, start_time=$3, end_time=$4, status=$5 WHERE id=$6 RETURNING *',
-            [user_id, worckspace_id, start_time, end_time, status, id]
+            'UPDATE "Bookings" SET user_id=$1, workspace_id=$2, start_time=$3, end_time=$4, status=$5 WHERE id=$6 RETURNING *',
+            [user_id, workspace_id, start_time, end_time, status, id]
         );
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Бронирование не найдено' });
