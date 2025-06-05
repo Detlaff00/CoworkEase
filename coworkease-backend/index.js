@@ -7,7 +7,6 @@ const jwt = require('jsonwebtoken');     // Для токена авториза
 require('dotenv').config();
 const secret = process.env.JWT_SECRET;
 // Лучше вынести в .env, для начала можешь прописать строкой
-fetch("http://localhost:3000/coworkings")
 const app = express();
 app.use(cors());
 app.use(express.json());
