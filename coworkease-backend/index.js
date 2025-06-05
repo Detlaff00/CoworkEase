@@ -95,6 +95,20 @@ app.get('/bookings', async (req, res) => {
     }
 });
 
+// Получить все бронирования коворкинга по его id
+app.get('/coworkings/:id/bookings', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            'SELECT b.* FROM "Bookings" b JOIN "Workspaces" w ON b.worckspace_id = w.id WHERE w.coworking_id = $1',
+            [id]
+        );
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Получить бронирование по id
 app.get('/bookings/:id', async (req, res) => {
     try {
