@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import BookingForm from "./BookingForm";
 
 type Coworking = {
     id: number;
@@ -85,6 +86,7 @@ export default function CoworkingDetails() {
                     </ul>
                 </div>
             )}
+            <BookingForm coworkingId={Number(id)} />
         </div>
     );
 }

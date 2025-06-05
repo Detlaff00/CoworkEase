@@ -52,3 +52,24 @@ export default tseslint.config({
   },
 })
 ```
+
+## API routes
+
+### `GET /coworkings/:id/bookings`
+
+Returns all bookings for workspaces that belong to the specified coworking.
+
+Example response:
+
+```json
+[
+  {
+    "id": 1,
+    "user_id": 2,
+    "worckspace_id": 5,
+    "start_time": "2024-08-01T10:00:00.000Z",
+    "end_time": "2024-08-01T12:00:00.000Z",
+    "status": "confirmed"
+  }
+]
+```
