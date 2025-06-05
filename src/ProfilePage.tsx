@@ -8,10 +8,20 @@ type User = {
   role: string;
 };
 
+type Booking = {
+  id: number;
+  start_time: string;
+  end_time: string;
+  status: string;
+  workspace_name: string;
+  coworking_name: string;
+};
+
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [bookings, setBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -32,6 +42,19 @@ export default function ProfilePage() {
         else setUser(data.user);
       })
       .catch(() => setError("Ошибка соединения с сервером"));
+
+    fetch("http://localhost:3000/profile/bookings", {
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer " + token,
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.error) setBookings(data.bookings);
+      })
+      .catch(() => {});
   }, []);
 
   const handleLogout = () => {
@@ -100,7 +123,19 @@ export default function ProfilePage() {
       </div>
       <div className="profile-booking-history">
         <h2>История бронирований</h2>
-        <p>Здесь будет отображаться история бронирований пользователя.</p>
+        {bookings.length === 0 ? (
+          <p>Бронирований нет.</p>
+        ) : (
+          <ul>
+            {bookings.map((b) => (
+              <li key={b.id}>
+                <strong>{new Date(b.start_time).toLocaleDateString()}</strong>
+                {" — "}
+                {b.workspace_name} ({b.coworking_name})
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
       <ChangePasswordModal open={modalOpen} onClose={() => setModalOpen(false)} />
     </div>

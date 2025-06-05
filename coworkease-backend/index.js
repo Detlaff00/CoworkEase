@@ -391,6 +391,25 @@ app.get('/profile', authMiddleware(), async (req, res) => {
     const result = await pool.query('SELECT id, email, name, role FROM "Users" WHERE id = $1', [userId]);
     res.json({ user: result.rows[0] });
 });
+// Список бронирований авторизованного пользователя
+app.get('/profile/bookings', authMiddleware(), async (req, res) => {
+    const userId = req.user.id;
+    try {
+        const result = await pool.query(
+            `SELECT b.id, b.start_time, b.end_time, b.status,
+                    w.name AS workspace_name, c.name AS coworking_name
+             FROM "Bookings" b
+             JOIN "Workspaces" w ON b.worckspace_id = w.id
+             JOIN "Coworkings" c ON w.coworking_id = c.id
+             WHERE b.user_id = $1
+             ORDER BY b.start_time DESC`,
+            [userId]
+        );
+        res.json({ bookings: result.rows });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 app.post('/change-password', authMiddleware(), async (req, res) => {
     const userId = req.user.id;
     const { oldPassword, newPassword } = req.body;
