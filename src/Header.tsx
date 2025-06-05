@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type User = {
   id: number;
@@ -20,6 +20,7 @@ export default function Header({
   user, onLoginClick, onLogout, onToggleTheme, darkMode
 }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <header className="header">
@@ -33,7 +34,7 @@ export default function Header({
         {!user ? (
           <>
             <button className="header-btn" onClick={onLoginClick}>Войти</button>
-            <button className="header-btn" onClick={() => window.location.href = "/register"}>Регистрация</button>
+            <button className="header-btn" onClick={() => navigate("/register")}>Регистрация</button>
           </>
         ) : (
           <div className="user-menu-wrapper">
@@ -43,12 +44,12 @@ export default function Header({
             </div>
             {menuOpen && (
               <div className="user-dropdown">
-                <div className="user-dropdown-item" onClick={() => {window.location.href = "/profile";}}>Личный кабинет</div>
+                <div className="user-dropdown-item" onClick={() => navigate("/profile")}>Личный кабинет</div>
                 <div className="user-dropdown-item" onClick={() => {
                   localStorage.removeItem("token");
                   localStorage.removeItem("user");
                   onLogout();
-                  window.location.href = "/";
+                  navigate("/");
                 }}>Выйти</div>
               </div>
             )}
