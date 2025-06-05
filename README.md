@@ -52,3 +52,14 @@ export default tseslint.config({
   },
 })
 ```
+
+## Environment Variables
+
+1. Copy `.env.example` to `.env`:
+
+```sh
+cp .env.example .env
+```
+
+2. Open `.env` and replace the placeholder values with your actual `DATABASE_URL` and `JWT_SECRET`.
+
