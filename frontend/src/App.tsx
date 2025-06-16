@@ -1,35 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Layout from './components/Layout';
+import ProfilePage from './pages/ProfilePage';
+import LoginForm from './components/LoginForm';
+import RegisterForm from './components/RegisterForm';
+import Dashboard from './components/Dashboard';
+import { ProtectedRoute } from './routes/ProtectedRoute';
+import SpacesListPage from './pages/SpacesListPage';
+import SpaceForm from './pages/SpaceForm';
+import BookingsListPage from './pages/BookingsListPage';
+import BookingForm from './pages/BookingForm';
 
+export default function App() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Routes>
+      <Route path="/login" element={<LoginForm />} />
+      <Route path="/register" element={<RegisterForm />} />
+      <Route element={<ProtectedRoute />}>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/spaces" element={<SpacesListPage />} />
+          <Route path="/spaces/new" element={<SpaceForm />} />
+          <Route path="/spaces/:id/edit" element={<SpaceForm />} />
+          <Route path="/bookings" element={<BookingsListPage />} />
+          <Route path="/bookings/new" element={<BookingForm />} />
+        </Route>
+      </Route>
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
+  );
 }
-
-export default App
