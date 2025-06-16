@@ -2,10 +2,19 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+
 const auth = require('../middleware/auth');
+const Joi = require('joi');
+const validate = require('../middleware/validate');
+
+const bookingSchema = Joi.object({
+  space_id:   Joi.number().integer().required(),
+  start_time: Joi.string().isoDate().required(),
+  end_time:   Joi.string().isoDate().required()
+});
 
 // POST /bookings — создать бронирование
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, validate(bookingSchema), async (req, res) => {
   const { space_id, start_time, end_time } = req.body;
   if (!space_id || !start_time || !end_time) {
     return res.status(400).json({ error: 'space_id, start_time и end_time обязательны' });

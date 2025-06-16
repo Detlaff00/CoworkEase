@@ -3,10 +3,22 @@ const router = express.Router();
 const pool = require('../db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Joi = require('joi');
+const validate = require('../middleware/validate');
 
+const registerSchema = Joi.object({
+  email:     Joi.string().email().required(),
+  password:  Joi.string().min(6).required(),
+  full_name: Joi.string().allow('', null)
+});
+
+const loginSchema = Joi.object({
+  email:    Joi.string().email().required(),
+  password: Joi.string().min(6).required()
+});
 
 // Регистрация
-router.post('/register', async (req, res) => {
+router.post('/register', validate(registerSchema), async (req, res) => {
     const { email, password, full_name } = req.body;
     if (!email || !password) {
         return res.status(400).json({ error: 'Email и пароль обязательны' });
@@ -35,7 +47,7 @@ router.post('/register', async (req, res) => {
     }
 });
 // Логин
-router.post('/login', async (req, res) => {
+router.post('/login', validate(loginSchema), async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
         return res.status(400).json({ error: 'Email и пароль обязательны' });

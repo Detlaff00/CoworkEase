@@ -1,6 +1,8 @@
 // backend/middleware/auth.js
 const jwt = require('jsonwebtoken');
 
+
+
 function authMiddleware(req, res, next) {
   const token = req.cookies.token;        // берём из HTTP-only cookie
   if (!token) return res.status(401).json({ error: 'Нет токена' });

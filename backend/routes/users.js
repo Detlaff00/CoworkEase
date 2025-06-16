@@ -4,6 +4,13 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 const auth = require('../middleware/auth');
+const Joi = require('joi');
+const validate = require('../middleware/validate');
+
+const updateUserSchema = Joi.object({
+  email: Joi.string().email(),
+  password: Joi.string().min(6)
+}).or('email', 'password');
 
 // GET /users/me — получить профиль
 router.get('/me', auth, async (req, res) => {
@@ -36,7 +43,7 @@ router.delete('/me', auth, async (req, res) => {
 });
 
 // PUT /users/me — обновить email и/или пароль
-router.put('/me', auth, async (req, res) => {
+router.put('/me', auth, validate(updateUserSchema), async (req, res) => {
     const { email, password } = req.body;
     if (!email && !password) {
         return res.status(400).json({ error: 'Нужно указать новый email и/или пароль' });

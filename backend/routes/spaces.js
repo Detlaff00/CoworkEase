@@ -2,10 +2,19 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
-const auth = require('../middleware/auth');
 
+const auth = require('../middleware/auth');
+const Joi = require('joi');
+const validate = require('../middleware/validate');
+
+const spaceSchema = Joi.object({
+  name: Joi.string().required(),
+  address: Joi.string().allow(null, ''),
+  capacity: Joi.number().integer().min(1).required(),
+  description: Joi.string().allow(null, '')
+});
 // Создать пространство
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, validate(spaceSchema), async (req, res) => {
   const { name, address, capacity, description } = req.body;
   if (!name || !capacity) {
     return res.status(400).json({ error: 'Имя и вместимость обязательны' });
@@ -48,7 +57,7 @@ router.get('/:id', auth, async (req, res) => {
 });
 
 // Обновить пространство
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', auth, validate(spaceSchema), async (req, res) => {
   const { id } = req.params;
   const { name, address, capacity, description } = req.body;
   try {

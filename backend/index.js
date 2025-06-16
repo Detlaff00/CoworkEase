@@ -1,15 +1,36 @@
-
-const cookieParser = require('cookie-parser');
 require('dotenv').config();
-const spaceRouter = require('./routes/spaces');
+
 const express = require('express');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const authMiddleware = require('./middleware/auth');
+
+const spaceRouter = require('./routes/spaces');
 const authRouter = require('./routes/auth');
 const pool = require('./db');
-const authMiddleware = require('./middleware/auth');
 const bookingRouter = require('./routes/bookings');
 const userRouter = require('./routes/users');
 
+
+
+// Настройка CORS
 const app = express();
+
+const whitelist = ['http://localhost:5173'];
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || whitelist.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization'],
+  credentials: true
+}));
+
+
 
 // Парсинг JSON и cookie
 app.use(express.json());
@@ -34,5 +55,14 @@ app.get('/users/me', authMiddleware, async (req, res) => {
   res.json(rows[0]);
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Backend API запущен на http://localhost:${PORT}`));
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err.stack);
+  res.status(err.status || 500).json({ error: err.message || 'Internal Server Error' });
+});
+
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => console.log(`Backend API запущен на http://localhost:${PORT}`));
+}
+module.exports = app;
