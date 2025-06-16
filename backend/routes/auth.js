@@ -62,10 +62,10 @@ router.post('/login', async (req, res) => {
         );
         // Set JWT as HTTP-only cookie
         res.cookie('token', token, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'strict',
-          maxAge: 1000 * 60 * 60, // 1 hour
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 1000 * 60 * 60, // 1 hour
         });
         res.json({ message: 'Успешный вход' });
     } catch (err) {
@@ -76,8 +76,8 @@ router.post('/login', async (req, res) => {
 
 // Logout: clear the cookie
 router.post('/logout', (req, res) => {
-  res.clearCookie('token');
-  res.json({ message: 'Выход выполнен' });
+    res.clearCookie('token');
+    res.json({ message: 'Выход выполнен' });
 });
 
 module.exports = router;

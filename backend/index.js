@@ -1,10 +1,13 @@
+
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
-// backend/index.js
-const express       = require('express');
-const cookieParser  = require('cookie-parser');
-const authRouter    = require('./routes/auth');
-const pool          = require('./db');
-const authMiddleware= require('./middleware/auth');
+const spaceRouter = require('./routes/spaces');
+const express = require('express');
+const authRouter = require('./routes/auth');
+const pool = require('./db');
+const authMiddleware = require('./middleware/auth');
+const bookingRouter = require('./routes/bookings');
+const userRouter = require('./routes/users');
 
 const app = express();
 
@@ -12,7 +15,9 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-
+app.use('/spaces', spaceRouter);
+app.use('/bookings', bookingRouter);
+app.use('/users', userRouter);
 
 // Маршруты авторизации
 app.use('/auth', authRouter);
