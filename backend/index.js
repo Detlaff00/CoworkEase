@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -10,6 +11,7 @@ const authRouter = require('./routes/auth');
 const pool = require('./db');
 const bookingRouter = require('./routes/bookings');
 const userRouter = require('./routes/users');
+const adminRouter = require('./routes/admin');
 
 
 
@@ -36,9 +38,11 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
+
 app.use('/spaces', spaceRouter);
 app.use('/bookings', bookingRouter);
 app.use('/users', userRouter);
+app.use('/admin', adminRouter);
 
 // Маршруты авторизации
 app.use('/auth', authRouter);

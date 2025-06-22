@@ -11,6 +11,8 @@ import SpacesListPage from './pages/SpacesListPage';
 import SpaceForm from './pages/SpaceForm';
 import BookingsListPage from './pages/BookingsListPage';
 import BookingForm from './pages/BookingForm';
+import AdminBookingsPage from './pages/AdminBookingsPage';
+import AdminSpacesPage from './pages/AdminSpacesPage';
 
 export default function App() {
   return (
@@ -19,6 +21,8 @@ export default function App() {
       <Route path="/register" element={<RegisterForm />} />
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
+        
+          <Route path="/admin/bookings" element={<AdminBookingsPage />} />
           <Route path="/" element={<Dashboard />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/spaces" element={<SpacesListPage />} />
@@ -26,6 +30,9 @@ export default function App() {
           <Route path="/spaces/:id/edit" element={<SpaceForm />} />
           <Route path="/bookings" element={<BookingsListPage />} />
           <Route path="/bookings/new" element={<BookingForm />} />
+          <Route path="/admin/spaces"     element={<AdminSpacesPage />} />
+          <Route path="/admin/spaces/new" element={<SpaceForm />} />
+          <Route path="/admin/spaces/:id/edit" element={<SpaceForm />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/login" replace />} />

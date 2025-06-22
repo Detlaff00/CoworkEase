@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 interface Space {
   id: number;
@@ -10,6 +11,7 @@ interface Space {
 }
 
 export default function SpacesListPage() {
+  const { isAdmin } = useAuth();
   const [spaces, setSpaces] = useState<Space[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -74,12 +76,14 @@ export default function SpacesListPage() {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl">Spaces</h1>
-        <Link
-          to="/spaces/new"
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-        >
-          + Create Space
-        </Link>
+        {isAdmin && (
+          <Link
+            to="/spaces/new"
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          >
+            + Create Space
+          </Link>
+        )}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {spaces.map((space) => (
@@ -91,18 +95,20 @@ export default function SpacesListPage() {
               <p className="mt-2 text-gray-700">{space.description}</p>
             )}
             <div className="mt-4 flex space-x-2">
-              <Link
-                to={`/spaces/${space.id}/edit`}
-                className="text-blue-600 hover:underline"
-              >
-                Edit
-              </Link>
-              <button
-                onClick={() => handleDelete(space.id)}
-                className="text-red-600 hover:underline"
-              >
-                Delete
-              </button>
+              {isAdmin ? (
+                <>
+                  <Link to={`/spaces/${space.id}/edit`} className="text-blue-600 hover:underline">
+                    Edit
+                  </Link>
+                  <button onClick={() => handleDelete(space.id)} className="text-red-600 hover:underline">
+                    Delete
+                  </button>
+                </>
+              ) : (
+                <Link to={`/bookings/new?space=${space.id}`} className="text-green-600 hover:underline">
+                  Book
+                </Link>
+              )}
             </div>
           </div>
         ))}

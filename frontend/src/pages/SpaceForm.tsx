@@ -1,6 +1,6 @@
-
 import { useState, useEffect, type FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 interface Space {
     id: number;
@@ -14,6 +14,7 @@ export default function SpaceForm() {
     const { id } = useParams<{ id: string }>();
     const isEdit = Boolean(id);
     const navigate = useNavigate();
+    const { isAdmin } = useAuth();
 
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
@@ -49,9 +50,10 @@ export default function SpaceForm() {
         setLoading(true);
 
         const payload = { name, address, capacity, description };
+        const base = isAdmin ? 'http://localhost:3000/admin/spaces' : 'http://localhost:3000/spaces';
         const url = isEdit
-            ? `http://localhost:3000/spaces/${id}`
-            : 'http://localhost:3000/spaces';
+            ? `${base}/${id}`
+            : base;
         const method = isEdit ? 'PUT' : 'POST';
 
         try {
@@ -63,7 +65,7 @@ export default function SpaceForm() {
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Ошибка сохранения');
-            navigate('/spaces');
+            navigate(isAdmin ? '/admin/spaces' : '/spaces');
         } catch (err: any) {
             setError(err.message);
         } finally {

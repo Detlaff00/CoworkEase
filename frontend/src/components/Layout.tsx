@@ -1,25 +1,31 @@
-
 import { NavLink, useNavigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 export default function Layout() {
   const navigate = useNavigate();
+  const { isAdmin } = useAuth();
 
-  const handleLogout = async () => {
+  async function handleLogout() {
     await fetch('http://localhost:3000/auth/logout', {
       method: 'POST',
       credentials: 'include',
     });
     navigate('/login');
-  };
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-gray-800 text-white p-4 flex justify-between">
         <nav className="space-x-4">
-          <NavLink to="/" className={({isActive}) => isActive ? 'underline' : ''} end>Dashboard</NavLink>
-          <NavLink to="/spaces" className={({isActive}) => isActive ? 'underline' : ''}>Spaces</NavLink>
-          <NavLink to="/bookings" className={({isActive}) => isActive ? 'underline' : ''}>Bookings</NavLink>
-          <NavLink to="/profile" className={({isActive}) => isActive ? 'underline' : ''}>Profile</NavLink>
+          <NavLink to="/" className={({ isActive }) => isActive ? 'underline' : ''} end>Dashboard</NavLink>
+          <NavLink to="/spaces" className={({ isActive }) => isActive ? 'underline' : ''}>Spaces</NavLink>
+          <NavLink to="/bookings" className={({ isActive }) => isActive ? 'underline' : ''}>Bookings</NavLink>
+          <NavLink to="/profile" className={({ isActive }) => isActive ? 'underline' : ''}>Profile</NavLink>
+          {isAdmin && (
+            <NavLink to="/admin/bookings" className={({ isActive }) => isActive ? 'underline' : ''}>
+              Admin Bookings
+            </NavLink>
+          )}
         </nav>
         <button onClick={handleLogout} className="hover:underline">Logout</button>
       </header>

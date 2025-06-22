@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 const formatDateTime = (iso: string) => {
   const date = new Date(iso);
@@ -15,9 +16,12 @@ interface Booking {
     space_name: string;
     start_time: string;
     end_time: string;
+    user_name?: string;
+    user_email?: string;
 }
 
 export default function BookingsListPage() {
+    const { isAdmin } = useAuth();
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -81,6 +85,16 @@ export default function BookingsListPage() {
                 {bookings.map(b => (
                     <div key={b.id} className="bg-white p-4 shadow rounded flex justify-between">
                         <div>
+                          {isAdmin && (
+                            <>
+                              {b.user_name && (
+                                <p className="text-sm text-gray-500">User: {b.user_name}</p>
+                              )}
+                              {b.user_email && (
+                                <p className="text-sm text-gray-500">Email: {b.user_email}</p>
+                              )}
+                            </>
+                          )}
                             <h2 className="font-semibold">{b.space_name}</h2>
                             <p>
                                 {formatDateTime(b.start_time)} — {formatDateTime(b.end_time)}

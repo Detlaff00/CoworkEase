@@ -55,12 +55,13 @@ router.post('/login', validate(loginSchema), async (req, res) => {
     try {
         // 1) Найти пользователя
         const result = await pool.query(
-            'SELECT id, password_hash FROM users WHERE email = $1', [email]
+            'SELECT id, password_hash, role FROM users WHERE email = $1', [email]
         );
         if (!result.rows.length) {
             return res.status(401).json({ error: 'Неверные учётные данные' });
         }
         const user = result.rows[0];
+        const { id, role } = user;
         // 2) Сравнить пароли
         const match = await bcrypt.compare(password, user.password_hash);
         if (!match) {
@@ -68,7 +69,7 @@ router.post('/login', validate(loginSchema), async (req, res) => {
         }
         // 3) Выдать JWT
         const token = jwt.sign(
-            { userId: user.id },
+            { userId: user.id, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRES_IN }
         );
