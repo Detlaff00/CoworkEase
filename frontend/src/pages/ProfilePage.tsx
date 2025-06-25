@@ -15,7 +15,7 @@ export default function ProfilePage() {
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/users/me', { credentials: 'include' })
+    fetch('http://localhost:3000/profile', { credentials: 'include' })
       .then(res => res.json())
       .then(data => {
         setUser(data);
@@ -31,7 +31,7 @@ export default function ProfilePage() {
     if (email !== user?.email) body.email = email;
     if (password) body.password = password;
 
-    const res = await fetch('http://localhost:3000/users/me', {
+    const res = await fetch('http://localhost:3000/profile', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -49,7 +49,7 @@ export default function ProfilePage() {
 
   const handleDelete = async () => {
     if (!window.confirm('Удалить аккаунт?')) return;
-    await fetch('http://localhost:3000/users/me', {
+    await fetch('http://localhost:3000/profile', {
       method: 'DELETE',
       credentials: 'include',
     });

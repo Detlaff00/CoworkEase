@@ -73,42 +73,34 @@ export default function SpacesListPage() {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl">Spaces</h1>
-        {isAdmin && (
-          <Link
-            to="/spaces/new"
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-          >
-            + Create Space
-          </Link>
-        )}
+    <div className="coworkings-section">
+      <div className="section-title">
+        <h2>Доступные коворкинги</h2>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="coworkings-grid">
         {spaces.map((space) => (
-          <div key={space.id} className="bg-white p-4 shadow rounded">
-            <h2 className="text-xl font-semibold">{space.name}</h2>
-            {space.address && <p className="text-gray-600">{space.address}</p>}
-            <p>Capacity: {space.capacity}</p>
-            {space.description && (
-              <p className="mt-2 text-gray-700">{space.description}</p>
-            )}
-            <div className="mt-4 flex space-x-2">
-              {isAdmin ? (
-                <>
-                  <Link to={`/spaces/${space.id}/edit`} className="text-blue-600 hover:underline">
-                    Edit
-                  </Link>
-                  <button onClick={() => handleDelete(space.id)} className="text-red-600 hover:underline">
-                    Delete
-                  </button>
-                </>
-              ) : (
-                <Link to={`/bookings/new?space=${space.id}`} className="text-green-600 hover:underline">
-                  Book
-                </Link>
-              )}
+          <div key={space.id} className="coworking-card">
+            <div className="card-image">🏢</div>
+            <div className="card-content">
+              <h3 className="card-title">{space.name}</h3>
+              {space.address && <div className="card-location">📍 {space.address}</div>}
+              <div className="card-stats">
+                <div className="stat-item">
+                  <div className="stat-number">{space.capacity}</div>
+                  <div className="stat-label">мест</div>
+                </div>
+              </div>
+              {space.description && <p className="mt-2 text-gray-700">{space.description}</p>}
+              <div className="mt-4 flex space-x-2">
+                {isAdmin ? (
+                  <>
+                    <Link to={`/spaces/${space.id}/edit`} className="text-blue-600 hover:underline">Edit</Link>
+                    <button onClick={() => handleDelete(space.id)} className="text-red-600 hover:underline">Delete</button>
+                  </>
+                ) : (
+                  <Link to={`/bookings/new?space=${space.id}`} className="text-green-600 hover:underline">Book</Link>
+                )}
+              </div>
             </div>
           </div>
         ))}

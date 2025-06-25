@@ -13,7 +13,7 @@ const updateUserSchema = Joi.object({
 }).or('email', 'password');
 
 // GET /users/me — получить профиль
-router.get('/me', auth, async (req, res) => {
+router.get('/profile', auth, async (req, res) => {
     try {
         const { rows } = await pool.query(
             'SELECT id, email, full_name, role FROM users WHERE id = $1',
@@ -27,7 +27,7 @@ router.get('/me', auth, async (req, res) => {
 });
 
 // DELETE /users/me — удалить текущего пользователя
-router.delete('/me', auth, async (req, res) => {
+router.delete('/proffile', auth, async (req, res) => {
     try {
         // Удаляем все его брони (если нужно сохранить чистую FK-целостность)
         await pool.query('DELETE FROM bookings WHERE user_id = $1', [req.user.id]);
@@ -43,7 +43,7 @@ router.delete('/me', auth, async (req, res) => {
 });
 
 // PUT /users/me — обновить email и/или пароль
-router.put('/me', auth, validate(updateUserSchema), async (req, res) => {
+router.put('/profile', auth, validate(updateUserSchema), async (req, res) => {
     const { email, password } = req.body;
     if (!email && !password) {
         return res.status(400).json({ error: 'Нужно указать новый email и/или пароль' });

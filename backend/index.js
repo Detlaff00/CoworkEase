@@ -27,8 +27,8 @@ app.use(cors({
       callback(new Error('Not allowed by CORS'));
     }
   },
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 
@@ -42,6 +42,7 @@ app.use(cookieParser());
 app.use('/spaces', spaceRouter);
 app.use('/bookings', bookingRouter);
 app.use('/users', userRouter);
+app.use('/', require('./routes/users'));
 app.use('/admin', adminRouter);
 
 // Маршруты авторизации

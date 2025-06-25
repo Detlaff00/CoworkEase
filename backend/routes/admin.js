@@ -14,6 +14,7 @@ router.get(
     try {
       const { rows } = await pool.query(`
         SELECT b.id,
+               u.full_name AS user_name,
                u.email   AS user_email,
                s.name    AS space_name,
                b.start_time,

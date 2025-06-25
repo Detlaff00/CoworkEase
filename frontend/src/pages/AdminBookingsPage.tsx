@@ -1,13 +1,13 @@
-
 import { useEffect, useState } from 'react';
 
 interface AdminBooking {
   id: number;
+  user_name?: string;
+  user_email?: string;
   space_name: string;
   start_time: string;
   end_time: string;
-  user_name?: string;
-  user_email?: string;
+ 
 }
 
 export default function AdminBookingsPage() {
@@ -45,7 +45,6 @@ export default function AdminBookingsPage() {
         <table className="min-w-full bg-white shadow rounded">
           <thead className="bg-gray-100">
             <tr>
-              <th className="px-4 py-2 text-left">ID</th>
               <th className="px-4 py-2 text-left">User Name</th>
               <th className="px-4 py-2 text-left">Email</th>
               <th className="px-4 py-2 text-left">Space</th>
@@ -56,7 +55,6 @@ export default function AdminBookingsPage() {
           <tbody>
             {data.map((b) => (
               <tr key={b.id} className="border-t">
-                <td className="px-4 py-2">{b.id}</td>
                 <td className="px-4 py-2">{b.user_name}</td>
                 <td className="px-4 py-2">{b.user_email}</td>
                 <td className="px-4 py-2">{b.space_name}</td>
