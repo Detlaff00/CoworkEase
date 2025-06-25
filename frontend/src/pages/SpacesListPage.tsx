@@ -94,11 +94,11 @@ export default function SpacesListPage() {
               <div className="mt-4 flex space-x-2">
                 {isAdmin ? (
                   <>
-                    <Link to={`/spaces/${space.id}/edit`} className="text-blue-600 hover:underline">Edit</Link>
-                    <button onClick={() => handleDelete(space.id)} className="text-red-600 hover:underline">Delete</button>
+                    <Link to={`/spaces/${space.id}/edit`} className="text-blue-600 hover:underline">Изменить</Link>
+                    <button onClick={() => handleDelete(space.id)} className="text-red-600 hover:underline">Удалить</button>
                   </>
                 ) : (
-                  <Link to={`/bookings/new?space=${space.id}`} className="text-green-600 hover:underline">Book</Link>
+                  <Link to={`/bookings/new?space=${space.id}`} className="text-green-600 hover:underline">Забронировать</Link>
                 )}
               </div>
             </div>

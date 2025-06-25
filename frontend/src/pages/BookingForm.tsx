@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 interface Space {
     id: number;
@@ -7,8 +7,12 @@ interface Space {
 }
 
 export default function BookingForm() {
+    const [searchParams] = useSearchParams();
+    const initialSpaceParam = searchParams.get('space');
     const [spaces, setSpaces] = useState<Space[]>([]);
-    const [spaceId, setSpaceId] = useState<number | ''>('');
+    const [spaceId, setSpaceId] = useState<number | ''>(
+        initialSpaceParam ? Number(initialSpaceParam) : ''
+    );
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
     const [loading, setLoading] = useState(true);

@@ -73,13 +73,10 @@ export default function BookingsListPage() {
     return (
         <div className="space-y-4">
             <div className="flex justify-between items-center">
-                <h1 className="text-2xl">Bookings</h1>
+                <h1 className="text-2xl">Ваши брони</h1>
                 <Link
                     to="/bookings/new"
-                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-                >
-                    + New Booking
-                </Link>
+                    className=""> Забронировать место </Link>
             </div>
             <div className="space-y-2">
                 {bookings.map(b => (
@@ -102,10 +99,7 @@ export default function BookingsListPage() {
                         </div>
                         <button
                             onClick={() => handleCancel(b.id)}
-                            className="text-red-600 hover:underline"
-                        >
-                            Cancel
-                        </button>
+                            className="">Отменить бронь</button>
                     </div>
                 ))}
             </div>
