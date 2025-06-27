@@ -12,7 +12,7 @@ const updateUserSchema = Joi.object({
   password: Joi.string().min(6)
 }).or('email', 'password');
 
-// GET /users/me — получить профиль
+// GET /profile — получить профиль
 router.get('/profile', auth, async (req, res) => {
     try {
         const { rows } = await pool.query(
@@ -26,7 +26,7 @@ router.get('/profile', auth, async (req, res) => {
     }
 });
 
-// DELETE /users/me — удалить текущего пользователя
+// DELETE /profile — удалить текущего пользователя
 router.delete('/proffile', auth, async (req, res) => {
     try {
         // Удаляем все его брони (если нужно сохранить чистую FK-целостность)
@@ -42,7 +42,7 @@ router.delete('/proffile', auth, async (req, res) => {
     }
 });
 
-// PUT /users/me — обновить email и/или пароль
+// PUT /profile — обновить email и/или пароль
 router.put('/profile', auth, validate(updateUserSchema), async (req, res) => {
     const { email, password } = req.body;
     if (!email && !password) {

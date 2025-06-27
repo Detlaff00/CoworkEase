@@ -21,7 +21,9 @@ export default function LoginForm() {
             });
             const data = await res.json();
             if (res.ok) {
-                navigate('/');
+                navigate('/home', { replace: true });
+                // Перезагрузить страницу, чтобы состояние контекста обновилось
+                window.location.reload();
             } else {
                 const msg = Array.isArray(data.error)
                     ? data.error.join(', ')

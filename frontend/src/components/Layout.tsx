@@ -11,7 +11,8 @@ export default function Layout() {
       method: 'POST',
       credentials: 'include',
     });
-    navigate('/login');
+    navigate('/', { replace: true });
+    window.location.reload();
   }
 
   return (
@@ -20,14 +21,21 @@ export default function Layout() {
         <div className="nav-content">
           <NavLink to="/" className="logo">CoWorkEase</NavLink>
           <ul className="nav-links">
-            <li><NavLink to="/" end className={({ isActive }) => isActive ? 'active' : ''}>Главная</NavLink></li>
+            <li><NavLink to="/home" end className={({ isActive }) => isActive ? 'active' : ''}>Главная</NavLink></li>
             <li><NavLink to="/spaces" className={({ isActive }) => isActive ? 'active' : ''}>Пространства</NavLink></li>
             <li>
-              {isAdmin ? (
+              {!profile ? (
+                // если не залогинен — ведём на страницу логина
+                <NavLink to="/login" className={({ isActive }) => isActive ? 'active' : ''}>
+                  Бронирования
+                </NavLink>
+              ) : isAdmin ? (
+                // если админ
                 <NavLink to="/admin/bookings" className={({ isActive }) => isActive ? 'active' : ''}>
                   Bookings (Admin)
                 </NavLink>
               ) : (
+                // если обычный пользователь
                 <NavLink to="/bookings" className={({ isActive }) => isActive ? 'active' : ''}>
                   Бронирования
                 </NavLink>
@@ -40,7 +48,7 @@ export default function Layout() {
               <span id="theme-icon">🌙</span>
             </div>
             {!profile ? (
-            
+
               <div className="auth-buttons">
                 <button onClick={() => navigate('/login')} className="btn-login">
                   Вход
@@ -50,7 +58,7 @@ export default function Layout() {
                 </button>
               </div>
             ) : (
-           
+
               <div className="profile-container">
                 <button className="profile-btn">
                   {profile.full_name.charAt(0).toUpperCase()}

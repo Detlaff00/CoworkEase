@@ -11,7 +11,7 @@ interface Space {
 }
 
 export default function SpacesListPage() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, profile } = useAuth();
   const [spaces, setSpaces] = useState<Space[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -92,7 +92,9 @@ export default function SpacesListPage() {
               </div>
               {space.description && <p className="mt-2 text-gray-700">{space.description}</p>}
               <div className="mt-4 flex space-x-2">
-                {isAdmin ? (
+                {!profile ? (
+                  <span></span>
+                ) : isAdmin ? (
                   <>
                     <Link to={`/spaces/${space.id}/edit`} className="text-blue-600 hover:underline">Изменить</Link>
                     <button onClick={() => handleDelete(space.id)} className="text-red-600 hover:underline">Удалить</button>

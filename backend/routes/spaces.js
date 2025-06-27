@@ -33,7 +33,7 @@ router.post('/', auth, validate(spaceSchema), async (req, res) => {
 });
 
 // Получить список пространств
-router.get('/', auth, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM spaces ORDER BY id');
     res.json(result.rows);
@@ -44,7 +44,7 @@ router.get('/', auth, async (req, res) => {
 });
 
 // Получить одно пространство по id
-router.get('/:id', auth, async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const result = await pool.query('SELECT * FROM spaces WHERE id = $1', [id]);
