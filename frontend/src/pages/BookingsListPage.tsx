@@ -14,6 +14,7 @@ interface Booking {
     id: number;
     space_id: number;
     space_name: string;
+    booking_date?: string;
     start_time: string;
     end_time: string;
     user_name?: string;
@@ -79,29 +80,58 @@ export default function BookingsListPage() {
                     className=""> Забронировать место </Link>
             </div>
             <div className="space-y-2">
-                {bookings.map(b => (
-                    <div key={b.id} className="bg-white p-4 shadow rounded flex justify-between">
-                        <div>
-                          {isAdmin && (
+                {bookings.map(b => {
+                    // Parse booking date and times
+                    const bookingDate = b.booking_date ? new Date(b.booking_date) : null;
+                    const startTime   = b.start_time || null;
+                    const endTime     = b.end_time   || null;
+
+                    return (
+                    <div key={b.id} className="bg-white p-4 shadow rounded">
+                        {isAdmin && (
                             <>
-                              {b.user_name && (
-                                <p className="text-sm text-gray-500">User: {b.user_name}</p>
-                              )}
-                              {b.user_email && (
-                                <p className="text-sm text-gray-500">Email: {b.user_email}</p>
-                              )}
+                              {b.user_name && <p className="text-sm text-gray-500">User: {b.user_name}</p>}
+                              {b.user_email && <p className="text-sm text-gray-500">Email: {b.user_email}</p>}
                             </>
-                          )}
-                            <h2 className="font-semibold">{b.space_name}</h2>
-                            <p>
-                                {formatDateTime(b.start_time)} — {formatDateTime(b.end_time)}
-                            </p>
+                        )}
+                        <h2 className="font-semibold">{b.space_name}</h2>
+                        <div className="grid grid-cols-3 gap-4 mt-2">
+                            <div>
+                                <div className="text-xs text-gray-500">Дата</div>
+                                <div className="text-sm">
+                                    {bookingDate
+                                        ? bookingDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
+                                        : '—'}
+                                </div>
+                            </div>
+                            <div>
+                                <div className="text-xs text-gray-500">Начало</div>
+                                <div className="text-sm">
+                                    {startTime
+                                        ? startTime.slice(0,5)
+                                        : '—'}
+                                </div>
+                            </div>
+                            <div>
+                                <div className="text-xs text-gray-500">Конец</div>
+                                <div className="text-sm">
+                                    {endTime
+                                        ? endTime.slice(0,5)
+                                        : '—'}
+                                </div>
+                            </div>
                         </div>
-                        <button
-                            onClick={() => handleCancel(b.id)}
-                            className="">Отменить бронь</button>
+                        <div className="flex justify-end mt-4">
+                            <button
+                                onClick={() => handleCancel(b.id)}
+                                className="text-red-600 hover:underline"
+                            >
+                                Отменить бронь
+                            </button>
+                        </div>
                     </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );

@@ -1,4 +1,3 @@
-
 const bcrypt = require('bcrypt');
 const express = require('express');
 const router = express.Router();
@@ -8,15 +7,19 @@ const Joi = require('joi');
 const validate = require('../middleware/validate');
 
 const updateUserSchema = Joi.object({
+  first_name: Joi.string().min(1),
+  last_name: Joi.string().min(1),
+  birthdate: Joi.date().iso(),
+  phone_number: Joi.string().min(5),
   email: Joi.string().email(),
-  password: Joi.string().min(6)
-}).or('email', 'password');
+  password: Joi.string().min(6),
+}).or('first_name', 'last_name', 'birthdate', 'phone_number', 'email', 'password');
 
 // GET /profile — получить профиль
 router.get('/profile', auth, async (req, res) => {
     try {
         const { rows } = await pool.query(
-            'SELECT id, email, full_name, role FROM users WHERE id = $1',
+            'SELECT id, first_name, last_name, birthdate, phone_number, email, role FROM users WHERE id = $1',
             [req.user.id]
         );
         return res.json(rows[0]);
@@ -44,9 +47,16 @@ router.delete('/proffile', auth, async (req, res) => {
 
 // PUT /profile — обновить email и/или пароль
 router.put('/profile', auth, validate(updateUserSchema), async (req, res) => {
-    const { email, password } = req.body;
-    if (!email && !password) {
-        return res.status(400).json({ error: 'Нужно указать новый email и/или пароль' });
+    const {
+      first_name,
+      last_name,
+      birthdate,
+      phone_number,
+      email,
+      password
+    } = req.body;
+    if (!first_name && !last_name && !birthdate && !phone_number && !email && !password) {
+        return res.status(400).json({ error: 'Нужно указать новые данные для обновления' });
     }
     try {
         // Подготовим части запроса в зависимости от переданных полей
@@ -63,12 +73,28 @@ router.put('/profile', auth, validate(updateUserSchema), async (req, res) => {
             fields.push(`password_hash = $${idx++}`);
             values.push(hash);
         }
+        if (first_name) {
+          fields.push(`first_name = $${idx++}`);
+          values.push(first_name);
+        }
+        if (last_name) {
+          fields.push(`last_name = $${idx++}`);
+          values.push(last_name);
+        }
+        if (birthdate) {
+          fields.push(`birthdate = $${idx++}`);
+          values.push(birthdate);
+        }
+        if (phone_number) {
+          fields.push(`phone_number = $${idx++}`);
+          values.push(phone_number);
+        }
         // Собираем SQL
         const sql = `
       UPDATE users
       SET ${fields.join(', ')}
       WHERE id = $${idx}
-      RETURNING id, email, full_name, role
+      RETURNING id, first_name, last_name, birthdate, phone_number, email, role
     `;
         values.push(req.user.id);
 

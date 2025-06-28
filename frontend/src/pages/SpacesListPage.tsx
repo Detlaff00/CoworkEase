@@ -93,14 +93,29 @@ export default function SpacesListPage() {
               {space.description && <p className="mt-2 text-gray-700">{space.description}</p>}
               <div className="mt-4 flex space-x-2">
                 {!profile ? (
+                  // viewing only for unauthenticated users
                   <span></span>
                 ) : isAdmin ? (
+                  // admin can edit or delete
                   <>
-                    <Link to={`/spaces/${space.id}/edit`} className="text-blue-600 hover:underline">Изменить</Link>
-                    <button onClick={() => handleDelete(space.id)} className="text-red-600 hover:underline">Удалить</button>
+                    <Link to={`/spaces/${space.id}/edit`} className="text-blue-600 hover:underline">
+                      Изменить
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(space.id)}
+                      className="text-red-600 hover:underline"
+                    >
+                      Удалить
+                    </button>
                   </>
                 ) : (
-                  <Link to={`/bookings/new?space=${space.id}`} className="text-green-600 hover:underline">Забронировать</Link>
+                  // regular user can book
+                  <Link
+                    to={`/bookings/new?space=${space.id}`}
+                    className="text-green-600 hover:underline"
+                  >
+                    Забронировать
+                  </Link>
                 )}
               </div>
             </div>

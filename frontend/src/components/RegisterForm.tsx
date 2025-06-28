@@ -3,9 +3,13 @@ import { useState, type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 export default function RegisterForm() {
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [birthdate, setBirthdate] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [fullName, setFullName] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
@@ -18,7 +22,15 @@ export default function RegisterForm() {
             const res = await fetch('http://localhost:3000/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password, full_name: fullName }),
+                body: JSON.stringify({
+                    first_name: firstName,
+                    last_name: lastName,
+                    birthdate,
+                    phone_number: phoneNumber,
+                    email,
+                    password,
+                    confirmPassword
+                }),
             });
             const data = await res.json();
             if (res.ok) {
@@ -45,6 +57,46 @@ export default function RegisterForm() {
             {!success && (
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
+                        <label className="block mb-1">Имя</label>
+                        <input
+                            type="text"
+                            className="w-full border rounded px-3 py-2"
+                            value={firstName}
+                            onChange={e => setFirstName(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-1">Фамилия</label>
+                        <input
+                            type="text"
+                            className="w-full border rounded px-3 py-2"
+                            value={lastName}
+                            onChange={e => setLastName(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-1">Дата рождения</label>
+                        <input
+                            type="date"
+                            className="w-full border rounded px-3 py-2"
+                            value={birthdate}
+                            onChange={e => setBirthdate(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-1">Номер телефона</label>
+                        <input
+                            type="tel"
+                            className="w-full border rounded px-3 py-2"
+                            value={phoneNumber}
+                            onChange={e => setPhoneNumber(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
                         <label className="block mb-1">Email</label>
                         <input
                             type="email"
@@ -55,21 +107,22 @@ export default function RegisterForm() {
                         />
                     </div>
                     <div>
-                        <label className="block mb-1">Полное имя</label>
-                        <input
-                            type="text"
-                            className="w-full border rounded px-3 py-2"
-                            value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
-                        />
-                    </div>
-                    <div>
                         <label className="block mb-1">Пароль</label>
                         <input
                             type="password"
                             className="w-full border rounded px-3 py-2"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-1">Подтвердите пароль</label>
+                        <input
+                            type="password"
+                            className="w-full border rounded px-3 py-2"
+                            value={confirmPassword}
+                            onChange={e => setConfirmPassword(e.target.value)}
                             required
                         />
                     </div>

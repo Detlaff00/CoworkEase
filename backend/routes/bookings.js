@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
@@ -8,9 +7,9 @@ const Joi = require('joi');
 const validate = require('../middleware/validate');
 
 const bookingSchema = Joi.object({
-  space_id:   Joi.number().integer().required(),
+  space_id: Joi.number().integer().required(),
   start_time: Joi.string().isoDate().required(),
-  end_time:   Joi.string().isoDate().required()
+  end_time: Joi.string().isoDate().required()
 });
 
 // POST /bookings — создать бронирование
@@ -19,23 +18,29 @@ router.post('/', auth, validate(bookingSchema), async (req, res) => {
   if (!space_id || !start_time || !end_time) {
     return res.status(400).json({ error: 'space_id, start_time и end_time обязательны' });
   }
+  // Derive booking_date from start_time
+  const booking_date = start_time.split('T')[0];
+  // Extract only time part for time columns
+  const startTimeOnly = start_time.split('T')[1];
+  const endTimeOnly   = end_time.split('T')[1];
   try {
     // Проверка пересечений: есть ли уже бронь в этом интервале
     const conflict = await pool.query(
       `SELECT id FROM bookings
        WHERE space_id = $1
-         AND tstzrange(start_time, end_time) && tstzrange($2::timestamp, $3::timestamp)`,
-      [space_id, start_time, end_time]
+         AND booking_date = $2
+         AND NOT ($4 <= start_time OR $3 >= end_time)`,
+      [space_id, booking_date, startTimeOnly, endTimeOnly]
     );
     if (conflict.rows.length) {
       return res.status(409).json({ error: 'Выбранное время уже занято' });
     }
     // Вставляем новую бронь
     const result = await pool.query(
-      `INSERT INTO bookings (user_id, space_id, start_time, end_time)
-       VALUES ($1, $2, $3, $4)
-       RETURNING *`,
-      [req.user.id, space_id, start_time, end_time]
+      `INSERT INTO bookings (space_id, user_id, booking_date, start_time, end_time)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING *;`,
+      [space_id, req.user.id, booking_date, startTimeOnly, endTimeOnly]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {

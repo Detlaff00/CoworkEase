@@ -7,9 +7,16 @@ const Joi = require('joi');
 const validate = require('../middleware/validate');
 
 const registerSchema = Joi.object({
-  email:     Joi.string().email().required(),
-  password:  Joi.string().min(6).required(),
-  full_name: Joi.string().allow('', null)
+  first_name: Joi.string().min(1).required(),
+  last_name: Joi.string().min(1).required(),
+  birthdate: Joi.date().iso().required(),
+  phone_number: Joi.string().min(5).required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
+  confirmPassword: Joi.string()
+    .valid(Joi.ref('password'))
+    .required()
+    .messages({ 'any.only': 'Пароли не совпадают' }),
 });
 
 const loginSchema = Joi.object({
@@ -19,7 +26,14 @@ const loginSchema = Joi.object({
 
 // Регистрация
 router.post('/register', validate(registerSchema), async (req, res) => {
-    const { email, password, full_name } = req.body;
+    const {
+      first_name,
+      last_name,
+      birthdate,
+      phone_number,
+      email,
+      password
+    } = req.body;
     if (!email || !password) {
         return res.status(400).json({ error: 'Email и пароль обязательны' });
     }
@@ -35,10 +49,11 @@ router.post('/register', validate(registerSchema), async (req, res) => {
         const hash = await bcrypt.hash(password, 10);
         // 3) Вставить нового пользователя
         const result = await pool.query(
-            `INSERT INTO users (email, password_hash, full_name)
-       VALUES ($1, $2, $3)
-       RETURNING id, email, full_name`,
-            [email, hash, full_name || null]
+          `INSERT INTO users
+            (first_name, last_name, birthdate, phone_number, email, password_hash)
+           VALUES ($1, $2, $3, $4, $5, $6)
+           RETURNING id, first_name, last_name, birthdate, phone_number, email, role`,
+          [first_name, last_name, birthdate, phone_number, email, hash]
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {

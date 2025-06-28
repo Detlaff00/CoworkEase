@@ -61,7 +61,7 @@ export default function Layout() {
 
               <div className="profile-container">
                 <button className="profile-btn">
-                  {profile.full_name.charAt(0).toUpperCase()}
+                  {profile.first_name.charAt(0).toUpperCase()}
                 </button>
                 <div className="profile-dropdown">
                   <button onClick={() => navigate('/profile')}>Профиль</button>

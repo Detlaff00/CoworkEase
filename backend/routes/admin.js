@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
@@ -14,7 +13,7 @@ router.get(
     try {
       const { rows } = await pool.query(`
         SELECT b.id,
-               u.full_name AS user_name,
+               CONCAT(u.first_name, ' ', u.last_name) AS user_name,
                u.email   AS user_email,
                s.name    AS space_name,
                b.start_time,
@@ -47,9 +46,10 @@ router.get(
                s.address,
                s.capacity,
                s.description,
-               u.full_name AS creator_name,
+               CONCAT(u.first_name, ' ', u.last_name) AS creator_name,
                u.email     AS creator_email
         FROM spaces s
+        JOIN users u ON s.created_by = u.id
         ORDER BY s.id;
       `);
       res.json(rows);

@@ -38,15 +38,13 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
+// Auth routes before other routers
+app.use('/auth', authRouter);
 
 app.use('/spaces', spaceRouter);
 app.use('/bookings', bookingRouter);
 app.use('/users', userRouter);
-app.use('/', require('./routes/users'));
 app.use('/admin', adminRouter);
-
-// Маршруты авторизации
-app.use('/auth', authRouter);
 
 // Открытые маршруты
 app.get('/', (req, res) => res.send('API is running'));
@@ -54,7 +52,8 @@ app.get('/', (req, res) => res.send('API is running'));
 // Пример защищённого маршрута
 app.get('/users/me', authMiddleware, async (req, res) => {
   const { rows } = await pool.query(
-    'SELECT id, email, full_name, role FROM users WHERE id = $1',
+    'SELECT id, first_name, last_name, birthdate, phone_number, email, role \
+     FROM users WHERE id = $1',
     [req.user.id]
   );
   res.json(rows[0]);

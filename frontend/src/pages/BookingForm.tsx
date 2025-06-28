@@ -15,6 +15,7 @@ export default function BookingForm() {
     );
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
+    const [date, setDate] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
@@ -39,10 +40,14 @@ export default function BookingForm() {
                 setLoading(false);
             });
     }, []);
+    // default date to today
+    useEffect(() => {
+      setDate(new Date().toISOString().split('T')[0]);
+    }, []);
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        if (!spaceId || !startTime || !endTime) {
+        if (!spaceId || !startTime || !endTime || !date) {
             setError('Заполните все поля');
             return;
         }
@@ -56,8 +61,8 @@ export default function BookingForm() {
                 credentials: 'include',
                 body: JSON.stringify({
                     space_id: spaceId,
-                    start_time: startTime,
-                    end_time: endTime
+                    start_time: `${date}T${startTime}`,
+                    end_time:   `${date}T${endTime}`
                 }),
             });
             const data = await res.json();
@@ -99,25 +104,37 @@ export default function BookingForm() {
                         ))}
                     </select>
                 </div>
-                <div>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div className="md:col-span-2">
+                    <label className="block mb-1">Дата</label>
+                    <input
+                      type="date"
+                      className="w-full border rounded px-3 py-2"
+                      value={date}
+                      onChange={e => setDate(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div>
                     <label className="block mb-1">Начало</label>
                     <input
-                        type="datetime-local"
-                        className="w-full border rounded px-3 py-2"
-                        value={startTime}
-                        onChange={e => setStartTime(e.target.value)}
-                        required
+                      type="time"
+                      className="w-full border rounded px-3 py-2"
+                      value={startTime}
+                      onChange={e => setStartTime(e.target.value)}
+                      required
                     />
-                </div>
-                <div>
+                  </div>
+                  <div>
                     <label className="block mb-1">Конец</label>
                     <input
-                        type="datetime-local"
-                        className="w-full border rounded px-3 py-2"
-                        value={endTime}
-                        onChange={e => setEndTime(e.target.value)}
-                        required
+                      type="time"
+                      className="w-full border rounded px-3 py-2"
+                      value={endTime}
+                      onChange={e => setEndTime(e.target.value)}
+                      required
                     />
+                  </div>
                 </div>
                 <button
                     type="submit"

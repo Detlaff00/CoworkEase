@@ -1,37 +1,25 @@
-
 import { useState, type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 export default function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
+    const { login } = useAuth();
+
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setError(null);
 
         try {
-            const res = await fetch('http://localhost:3000/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify({ email, password }),
-            });
-            const data = await res.json();
-            if (res.ok) {
-                navigate('/home', { replace: true });
-                // Перезагрузить страницу, чтобы состояние контекста обновилось
-                window.location.reload();
-            } else {
-                const msg = Array.isArray(data.error)
-                    ? data.error.join(', ')
-                    : data.error;
-                setError(msg);
-            }
-        } catch (err) {
-            setError('Network error');
+            await login(email, password);
+            navigate('/home', { replace: true });
+            window.location.reload();
+        } catch (err: any) {
+            setError(err.message || 'Ошибка входа');
             console.error(err);
         }
     };
