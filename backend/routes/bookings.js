@@ -22,7 +22,7 @@ router.post('/', auth, validate(bookingSchema), async (req, res) => {
   const booking_date = start_time.split('T')[0];
   // Extract only time part for time columns
   const startTimeOnly = start_time.split('T')[1];
-  const endTimeOnly   = end_time.split('T')[1];
+  const endTimeOnly = end_time.split('T')[1];
   try {
     // Проверка пересечений: есть ли уже бронь в этом интервале
     const conflict = await pool.query(
@@ -52,12 +52,22 @@ router.post('/', auth, validate(bookingSchema), async (req, res) => {
 // GET /bookings — список бронирований текущего пользователя
 router.get('/', auth, async (req, res) => {
   try {
+    // Автоматически помечаем просроченные брони как completed
+    await pool.query(`
+      UPDATE bookings
+         SET status = 'completed'
+       WHERE status = 'active'
+         AND (booking_date < CURRENT_DATE
+              OR (booking_date = CURRENT_DATE AND end_time < CURRENT_TIME))
+    `);
+
     const result = await pool.query(
       `SELECT b.*, s.name AS space_name
        FROM bookings b
        JOIN spaces s ON b.space_id = s.id
        WHERE b.user_id = $1
-       ORDER BY b.start_time`,
+         AND b.status = 'active'
+       ORDER BY b.booking_date, b.start_time`,
       [req.user.id]
     );
     res.json(result.rows);
@@ -79,13 +89,54 @@ router.delete('/:id', auth, async (req, res) => {
     if (!check.rows.length) {
       return res.status(404).json({ error: 'Бронь не найдена' });
     }
-    // Удаляем запись
-    await pool.query('DELETE FROM bookings WHERE id = $1', [id]);
+    // Помечаем бронирование как отменённое
+    await pool.query(
+      'UPDATE bookings SET status = \'cancelled\' WHERE id = $1 AND user_id = $2',
+      [id, req.user.id]
+    );
     res.json({ message: 'Бронь отменена' });
   } catch (err) {
     console.error('Booking delete error:', err);
     res.status(500).json({ error: 'Не удалось отменить бронь' });
   }
 });
+// GET /bookings/history — список завершённых и отменённых броней
+router.get('/history', auth, async (req, res) => {
+  try {
+    // Автоматически помечаем активные, но уже прошедшие, как completed
+    await pool.query(`
+      UPDATE bookings
+         SET status = 'completed'
+       WHERE status = 'active'
+         AND (booking_date < CURRENT_DATE
+              OR (booking_date = CURRENT_DATE AND end_time < CURRENT_TIME))
+    `);
+
+    // Выбираем все completed и cancelled брони текущего пользователя
+    const result = await pool.query(
+      `SELECT 
+         b.id,
+         b.space_id,
+         s.name    AS space_name,
+         b.booking_date,
+         b.start_time,
+         b.end_time,
+         b.status
+       FROM bookings b
+       JOIN spaces s ON b.space_id = s.id
+       WHERE b.user_id = $1
+         AND b.status IN ('completed','cancelled')
+       ORDER BY b.booking_date DESC, b.start_time DESC`,
+      [req.user.id]
+    );
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Booking history error:', err);
+    res.status(500).json({ error: 'Не удалось получить историю бронирований' });
+  }
+});
+
+
 
 module.exports = router;

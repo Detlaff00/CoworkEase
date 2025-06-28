@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import '../style/BookingForm.css';
 
 interface Space {
     id: number;
@@ -51,6 +52,19 @@ export default function BookingForm() {
             setError('Заполните все поля');
             return;
         }
+        // Prevent booking in the past
+        const selectedStart = new Date(`${date}T${startTime}`);
+        if (selectedStart < new Date()) {
+            setError('Нельзя забронировать место в прошлом');
+            return;
+        }
+        // Prevent end time earlier than start time
+        const selectedEnd = new Date(`${date}T${endTime}`);
+        if (selectedEnd <= selectedStart) {
+            setError('Время окончания должно быть позже времени начала');
+            return;
+        }
+
         setError(null);
         setLoading(true);
 
@@ -86,14 +100,14 @@ export default function BookingForm() {
     }
 
     return (
-        <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow rounded">
-            <h2 className="text-2xl mb-4">Создать бронь</h2>
-            {error && <div className="text-red-600 mb-4">{error}</div>}
+        <div className="booking-form">
+            <h2 className="booking-form__title">Создать бронь</h2>
+            {error && <div className="booking-form__error">{error}</div>}
             <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block mb-1">Пространство</label>
+                <div className="form-group">
+                    <label className="form-group__label">Пространство</label>
                     <select
-                        className="w-full border rounded px-3 py-2"
+                        className="form-group__input"
                         value={spaceId}
                         onChange={e => setSpaceId(Number(e.target.value))}
                         required
@@ -105,31 +119,31 @@ export default function BookingForm() {
                     </select>
                 </div>
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <div className="md:col-span-2">
-                    <label className="block mb-1">Дата</label>
+                  <div className="md:col-span-2 form-group">
+                    <label className="form-group__label">Дата</label>
                     <input
                       type="date"
-                      className="w-full border rounded px-3 py-2"
+                      className="form-group__input"
                       value={date}
                       onChange={e => setDate(e.target.value)}
                       required
                     />
                   </div>
-                  <div>
-                    <label className="block mb-1">Начало</label>
+                  <div className="form-group">
+                    <label className="form-group__label">Начало</label>
                     <input
                       type="time"
-                      className="w-full border rounded px-3 py-2"
+                      className="form-group__input"
                       value={startTime}
                       onChange={e => setStartTime(e.target.value)}
                       required
                     />
                   </div>
-                  <div>
-                    <label className="block mb-1">Конец</label>
+                  <div className="form-group">
+                    <label className="form-group__label">Конец</label>
                     <input
                       type="time"
-                      className="w-full border rounded px-3 py-2"
+                      className="form-group__input"
                       value={endTime}
                       onChange={e => setEndTime(e.target.value)}
                       required
@@ -138,7 +152,7 @@ export default function BookingForm() {
                 </div>
                 <button
                     type="submit"
-                    className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+                    className="btn btn-primary"
                     disabled={loading}
                 >
                     {loading ? 'Сохранение...' : 'Создать бронь'}

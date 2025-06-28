@@ -9,9 +9,6 @@ const pool = new Pool({
     port: 5432,
 });
 
-// Опционально: лог подключения
-pool.on('connect', () => {
-    console.log('✅ Connected to PostgreSQL');
-});
+
 
 module.exports = pool;

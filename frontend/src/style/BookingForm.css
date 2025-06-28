@@ -1,0 +1,75 @@
+
+
+/* Booking Form Container */
+.booking-form {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 5px 15px var(--shadow);
+}
+
+/* Form Title */
+.booking-form__title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+/* Error Message */
+.booking-form__error {
+  color: var(--error);
+  margin-bottom: 1rem;
+}
+
+/* Form Group Wrapper */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+/* Label Styling */
+.form-group__label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Input, Select, Date/Time Fields */
+.form-group__input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: border 0.3s ease;
+}
+
+.form-group__input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Primary Submit Button */
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}

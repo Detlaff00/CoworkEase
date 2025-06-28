@@ -91,7 +91,7 @@ input, select, textarea {
 }
 
 .main {
-  padding-top: 100px;
+  padding-top: 0px;
   min-height: 100vh;
   width: 100%;
 }
@@ -214,7 +214,7 @@ body {
 
 /* Hero-секция */
 .main {
-  padding-top: 100px;
+  padding-top: 50px;
   width: 100%;
 }
 .hero {

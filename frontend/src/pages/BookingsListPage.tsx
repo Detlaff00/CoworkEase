@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import '../style/BookingsListPages.css';
 
 const formatDateTime = (iso: string) => {
   const date = new Date(iso);
@@ -72,14 +73,16 @@ export default function BookingsListPage() {
     }
 
     return (
-        <div className="space-y-4">
-            <div className="flex justify-between items-center">
-                <h1 className="text-2xl">Ваши брони</h1>
-                <Link
-                    to="/bookings/new"
-                    className=""> Забронировать место </Link>
+        <div className="bookings-page">
+            <div className="section-title">
+              <h2>Ваши брони</h2>
             </div>
-            <div className="space-y-2">
+            <div className="section-actions">
+              <Link to="/bookings/new" className="btn btn-primary">
+                Забронировать место
+              </Link>
+            </div>
+            <div className="booking-list">
                 {bookings.map(b => {
                     // Parse booking date and times
                     const bookingDate = b.booking_date ? new Date(b.booking_date) : null;
@@ -87,15 +90,16 @@ export default function BookingsListPage() {
                     const endTime     = b.end_time   || null;
 
                     return (
-                    <div key={b.id} className="bg-white p-4 shadow rounded">
-                        {isAdmin && (
-                            <>
-                              {b.user_name && <p className="text-sm text-gray-500">User: {b.user_name}</p>}
-                              {b.user_email && <p className="text-sm text-gray-500">Email: {b.user_email}</p>}
-                            </>
-                        )}
-                        <h2 className="font-semibold">{b.space_name}</h2>
-                        <div className="grid grid-cols-3 gap-4 mt-2">
+                    <div key={b.id} className="booking-card">
+                        <div className="booking-header">
+                          <div className="booking-info">
+                            <h3>{b.space_name}</h3>
+                            {isAdmin && b.user_name && (
+                              <p className="text-sm text-gray-500">User: {b.user_name}</p>
+                            )}
+                          </div>
+                        </div>
+                        <div className="booking-details">
                             <div>
                                 <div className="text-xs text-gray-500">Дата</div>
                                 <div className="text-sm">
@@ -124,7 +128,7 @@ export default function BookingsListPage() {
                         <div className="flex justify-end mt-4">
                             <button
                                 onClick={() => handleCancel(b.id)}
-                                className="text-red-600 hover:underline"
+                                className="btn btn-secondary status-cancelled"
                             >
                                 Отменить бронь
                             </button>

@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -17,10 +19,12 @@
     "express": "^5.1.0",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
+    "node-cron": "^4.1.1",
     "pg": "^8.16.0"
   },
   "devDependencies": {
     "jest": "^30.0.0",
+    "nodemon": "^3.1.10",
     "supertest": "^7.1.1"
   }
 }
