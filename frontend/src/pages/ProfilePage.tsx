@@ -10,6 +10,12 @@ interface User {
   phone_number: string;
   email: string;
   role: string;
+  stats?: {
+    total_bookings: number;
+    total_hours: number;
+    total_spent: number;
+    total_time: string;
+  };
 }
 
 interface Booking {
@@ -18,6 +24,7 @@ interface Booking {
   booking_date?: string;
   start_time: string;
   end_time: string;
+  cost: number;
   status?: string;
 }
 
@@ -31,7 +38,7 @@ export default function ProfilePage() {
   const [birthdate, setBirthdate] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-  const [isEditingPhone, setIsEditingPhone] = useState(false);
+
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -118,12 +125,28 @@ export default function ProfilePage() {
   };
 
   const handleDelete = async () => {
-    if (!window.confirm('Удалить аккаунт?')) return;
-    await fetch('http://localhost:3000/users/profile', {
-      method: 'DELETE',
-      credentials: 'include',
-    });
-    window.location.href = '/login';
+    if (!window.confirm('Вы уверены, что хотите удалить аккаунт без возможности восстановления?')) return;
+    try {
+      const res = await fetch('http://localhost:3000/users/profile', {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Ошибка при удалении профиля');
+      }
+      // После успешного удаления — разлогиниваем пользователя
+      const logoutRes = await fetch('http://localhost:3000/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+      if (!logoutRes.ok) {
+        console.warn('Logout failed after delete');
+      }
+      window.location.href = '/login';
+    } catch (err) {
+      alert((err as Error).message);
+    }
   };
 
   if (!user) return <div>Loading profile...</div>;
@@ -209,11 +232,11 @@ export default function ProfilePage() {
         </div>
       )}
       <main className="main">
-      <div className="page-header">
-        <h1 className="page-title">Личный кабинет</h1>
-        <p className="page-subtitle">Управляйте своим профилем и бронированиями</p>
-      </div>
-      <div className="dashboard-grid">
+        <div className="dashboard-grid">
+          <div className="page-header">
+            <h1 className="page-title">Личный кабинет</h1>
+            <p className="page-subtitle">Управляйте своим профилем и бронированиями</p>
+          </div>
         {/* Profile Card */}
         <div className="profile-card fade-in">
           <div className="profile-header">
@@ -225,22 +248,20 @@ export default function ProfilePage() {
             <p className="profile-email">{user.email}</p>
           </div>
           <div className="profile-stats">
-            <div className="stat-item">
-              <div className="stat-number">—</div>
-              <div className="stat-label">Бронирований</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">—</div>
-              <div className="stat-label">Часов работы</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">—</div>
-              <div className="stat-label">Рейтинг</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">—</div>
-              <div className="stat-label">Потрачено</div>
-            </div>
+           <div className="stat-item">
+          <div className="stat-number">{user.stats?.total_bookings ?? '—'}</div>
+          <div className="stat-label">Бронирований</div>
+        </div>
+        <div className="stat-item">
+          <div className="stat-number">{user.stats?.total_time ?? '—'}</div>
+          <div className="stat-label">Часов работы</div>
+        </div>
+        <div className="stat-item">
+          <div className="stat-number">
+            {user.stats?.total_spent != null ? user.stats.total_spent : '—'}
+          </div>
+          <div className="stat-label">Потрачено</div>
+        </div>
           </div>
           <div className="profile-actions">
             <button
@@ -328,6 +349,10 @@ export default function ProfilePage() {
                               : '—'}
                           </div>
                         </div>
+                        <div>
+                          <div className="text-xs text-gray-500">Стоимость</div>
+                          <div className="text-sm">{b.cost} ₽</div>
+                        </div>
                       </div>
                     </div>
                   );
@@ -377,6 +402,10 @@ export default function ProfilePage() {
                           <div className="text-sm">
                             {endTime ? endTime.slice(0,5) : '—'}
                           </div>
+                        </div>
+                        <div>
+                          <div className="text-xs text-gray-500">Стоимость</div>
+                          <div className="text-sm">{b.cost} ₽</div>
                         </div>
                       </div>
                     </div>

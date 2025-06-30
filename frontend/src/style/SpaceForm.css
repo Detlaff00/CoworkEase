@@ -1,0 +1,144 @@
+
+/* Container for space creation/edit form */
+
+.space-form {
+  background: var(--bg-secondary);
+  padding: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px var(--shadow);
+  max-width: 800px;
+  margin: 2rem auto;
+}
+
+/* Form header */
+.space-form h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+}
+
+/* Labels */
+.space-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Text inputs and textarea */
+.space-form input[type="text"],
+.space-form input[type="number"],
+.space-form textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.space-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Fieldsets and legends */
+.space-form fieldset {
+  margin-bottom: 1.5rem;
+  border: none;
+}
+
+.space-form legend {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+
+/* Amenities grid */
+.space-form .amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.space-form .amenities-grid label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+/* Checkbox styles */
+.space-form .amenities-grid input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* Submit button */
+.space-form button[type="submit"] {
+  padding: 0.75rem 1.5rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.space-form button[type="submit"]:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+.space-form .switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+.space-form .switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.space-form .switch .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  border-radius: 20px;
+  transition: .3s;
+}
+.space-form .switch .slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  border-radius: 50%;
+  transition: .3s;
+}
+.space-form .switch input:checked + .slider {
+  background-color: #6366f1;
+}
+.space-form .switch input:checked + .slider:before {
+  transform: translateX(20px);
+}
+ 

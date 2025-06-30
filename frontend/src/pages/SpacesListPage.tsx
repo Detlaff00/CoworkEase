@@ -3,12 +3,20 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import '../style/SpacesListPage.css';
 
+interface Amenity {
+  amenity_id: number;
+  name: string;
+  is_available: boolean;
+}
+
 interface Space {
   id: number;
   name: string;
   address: string | null;
   capacity: number;
+  price_per_hour: number;
   description: string | null;
+  amenities: Amenity[];
 }
 
 export default function SpacesListPage() {
@@ -78,6 +86,11 @@ export default function SpacesListPage() {
     <div className="coworkings-section">
       <div className="section-title">
         <h2>Доступные коворкинги</h2>
+        {isAdmin && profile && (
+          <Link to="/spaces/new" className="btn btn-primary ml-4">
+            Создать коворкинг
+          </Link>
+        )}
       </div>
       <div className="coworkings-grid">
         {spaces.map((space) => (
@@ -93,16 +106,28 @@ export default function SpacesListPage() {
             <div className="card-content">
               <h3 className="card-title">{space.name}</h3>
               {space.address && <div className="card-location">📍 {space.address}</div>}
-              <div className="card-stats">
+              <div className="card-stats flex space-x-4">
                 <div className="stat-item">
                   <div className="stat-number">{space.capacity}</div>
-                  <div className="stat-label">мест</div>
+                  <div className="stat-label">Вместимость</div>
+                </div>
+                <div className="stat-item">
+                  <div className="stat-number">{space.price_per_hour}</div>
+                  <div className="stat-label">Цена в час</div>
                 </div>
               </div>
-              {space.description && <p className="mt-2 text-gray-700">{space.description}</p>}
+              <div className="card-features mt-2">
+                {space.amenities
+                  .filter(a => a.is_available)
+                  .map(a => (
+                    <span key={a.amenity_id} className="feature-tag">
+                      {a.name}
+                    </span>
+                ))}
+              </div>
               {isAdmin && profile && (
-                <div className="mt-4 flex space-x-2">
-                  <Link to={`/spaces/${space.id}/edit`} className="text-blue-600 hover:underline">
+                <div className="card-actions">
+                  <Link to={`/spaces/${space.id}/edit`} className="edit-btn">
                     Изменить
                   </Link>
                   <button
@@ -110,7 +135,7 @@ export default function SpacesListPage() {
                       e.stopPropagation();
                       handleDelete(space.id);
                     }}
-                    className="text-red-600 hover:underline"
+                    className="delete-btn"
                   >
                     Удалить
                   </button>
@@ -145,18 +170,37 @@ export default function SpacesListPage() {
             {selectedSpace.address && (
               <p className="text-gray-600 mb-2">📍 {selectedSpace.address}</p>
             )}
-            <p className="mb-4">{selectedSpace.description}</p>
-            <div className="card-stats mb-4">
+            {selectedSpace.description && (
+              <p className="mt-2 text-gray-700">{selectedSpace.description}</p>
+            )}
+            <div className="card-features mb-4">
+              {(selectedSpace.amenities ?? [])
+                .filter(a => a.is_available)
+                .map(a => (
+                  <span key={a.amenity_id} className="feature-tag">
+                    {a.name}
+                  </span>
+                ))
+              }
+            </div>
+            <div className="card-stats mb-4 flex space-x-4">
               <div className="stat-item">
                 <div className="stat-label">Вместимость</div>
                 <div className="stat-number">{selectedSpace.capacity}</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-label">Цена в час</div>
+                <div className="stat-number">{selectedSpace.price_per_hour}</div>
               </div>
             </div>
             <button
               className="btn btn-primary"
               onClick={() => {
-                // redirect to booking page
-                window.location.href = `/bookings/new?space=${selectedSpace.id}`;
+                if (profile) {
+                  window.location.href = `/bookings/new?space=${selectedSpace.id}`;
+                } else {
+                  window.location.href = `/login`;
+                }
               }}
             >
               Забронировать

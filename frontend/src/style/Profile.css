@@ -2,7 +2,7 @@
 .main {
   padding-top: 0;     /* Removed extra top spacing */
   min-height: 100vh;
-  max-width: 1400px;
+  max-width: 100%;
   margin: 0 auto;
   padding-left: 2rem;
   padding-right: 2rem;
@@ -10,19 +10,19 @@
 
 /* Page header */
 .page-header {
-  padding: 2rem 0;
+  padding: 1.5rem 0;
   /* border-bottom removed */
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 .page-title {
-  font-size: 2.2rem;
+  font-size: 2.5rem;
   font-weight: 800;
   color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 .page-subtitle {
   color: var(--text-secondary);
-  font-size: 1.1rem;
+  font-size: 1.25rem;
 }
 
 /* Dashboard grid layout */
@@ -30,14 +30,15 @@
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
+  align-items: start;
 }
 
 /* Profile card */
 .profile-card {
   background: var(--bg-card);
-  border-radius: 20px;
-  padding: 2rem;
+  border-radius: 25px;
+  padding: 3rem;
   box-shadow: 0 10px 30px var(--shadow);
   border: 1px solid var(--border);
 }
@@ -59,20 +60,20 @@
   margin-bottom: 2rem;
 }
 .profile-avatar {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent), #8b5cf6);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 700;
   margin: 0 auto 1rem;
 }
 .profile-name {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 0.5rem;
@@ -80,6 +81,7 @@
 .profile-email {
   color: var(--text-secondary);
   margin-bottom: 1rem;
+  font-size: 1rem;
 }
 
 /* Profile stats */
@@ -91,18 +93,18 @@
 }
 .stat-item {
   text-align: center;
-  padding: 1rem;
+  padding: 1.5rem;
   background: var(--bg-primary);
   border-radius: 15px;
 }
 .stat-number {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 700;
   color: var(--accent);
   margin-bottom: 0.25rem;
 }
 .stat-label {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--text-secondary);
 }
 
@@ -113,13 +115,14 @@
   gap: 1rem;
 }
 .btn {
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 2rem;
   border-radius: 12px;
   font-weight: 600;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
   border: none;
+  font-size: 1rem;
 }
 .btn-primary {
   background: var(--accent);
@@ -142,7 +145,7 @@
 /* Content section with tabs */
 .content-section {
   background: var(--bg-card);
-  border-radius: 20px;
+  border-radius: 25px;
   padding: 2rem;
   box-shadow: 0 10px 30px var(--shadow);
   border: 1px solid var(--border);
@@ -153,13 +156,14 @@
   margin-bottom: 2rem;
 }
 .tab {
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 2rem;
   background: var(--bg-primary);
   border: 1px solid var(--border);
   border-radius: 25px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 500;
+  font-size: 1rem;
 }
 .tab.active {
   background: var(--accent);
@@ -220,7 +224,7 @@
 
 .booking-card .booking-details {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
 }
 
@@ -390,4 +394,46 @@ label {
 .settings-group h3 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
+}
+/* Stretch the "Потрачено" stat to span two columns */
+.profile-stats .stat-item:last-child {
+  grid-column: 1 / -1;
+}
+
+/* Ensure the page header spans both columns in the dashboard grid */
+.dashboard-grid .page-header {
+  grid-column: 1 / -1;
+  margin-bottom: 2rem;
+}
+/* Delete profile button styling */
+.profile-actions .btn-secondary {
+  font-size: 1rem;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+.profile-actions .btn-secondary:hover {
+  background: #e53e3e;
+  color: #fff;
+  border-color: #e53e3e;
+}
+
+/* Ensure booking cards stack full-width in profile */
+.content-section .tab-content.active {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.content-section .tab-content.active .booking-card {
+  width: 100%;
+  max-width: none;
+}
+/* Profile bookings: list items stacked full-width */
+.content-section .booking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.content-section .booking-list .booking-card {
+  width: 100%;
+  max-width: none;
 }

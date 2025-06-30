@@ -1,10 +1,8 @@
-
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import ProfilePage from './pages/ProfilePage';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
-import Dashboard from './components/Dashboard';
 import { ProtectedRoute } from './routes/ProtectedRoute';
 import SpacesListPage from './pages/SpacesListPage';
 import SpaceForm from './pages/SpaceForm';
@@ -27,7 +25,6 @@ export default function App() {
 
         {/* Interactive routes require authentication */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/spaces/new" element={<SpaceForm />} />
           <Route path="/spaces/:id/edit" element={<SpaceForm />} />
           <Route path="/bookings" element={<BookingsListPage />} />

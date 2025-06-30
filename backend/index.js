@@ -12,6 +12,7 @@ const pool = require('./db');
 const bookingRouter = require('./routes/bookings');
 const userRouter = require('./routes/users');
 const adminRouter = require('./routes/admin');
+const amenitiesRouter = require('./routes/amenities');
 
 
 
@@ -44,7 +45,22 @@ app.use('/auth', authRouter);
 app.use('/spaces', spaceRouter);
 app.use('/bookings', bookingRouter);
 app.use('/users', userRouter);
+app.use('/amenities', amenitiesRouter);
+
 app.use('/admin', adminRouter);
+
+// Public endpoint to fetch all amenities
+app.get('/amenities', async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT id, name FROM amenities ORDER BY name'
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching amenities:', err);
+    res.status(500).json({ error: 'Ошибка при получении удобств' });
+  }
+});
 
 // Открытые маршруты
 app.get('/', (req, res) => res.send('API is running'));

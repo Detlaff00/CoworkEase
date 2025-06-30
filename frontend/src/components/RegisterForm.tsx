@@ -1,6 +1,7 @@
 // src/components/RegisterForm.tsx
 import { useState, type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import '../style/RegisterForm.css';
 
 export default function RegisterForm() {
     const [firstName, setFirstName] = useState('');
@@ -50,13 +51,13 @@ export default function RegisterForm() {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-20 p-6 shadow-lg rounded-lg">
+        <div className="register-form max-w-md mx-auto mt-20 p-6 shadow-lg rounded-lg">
             <h2 className="text-2xl mb-4">Регистрация в CoworkEase</h2>
             {success && <div className="text-green-600 mb-2">Успешно. Перенаправление...</div>}
             {error && <div className="text-red-600 mb-2">{error}</div>}
             {!success && (
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
+                    <div className="form-group">
                         <label className="block mb-1">Имя</label>
                         <input
                             type="text"
@@ -66,7 +67,7 @@ export default function RegisterForm() {
                             required
                         />
                     </div>
-                    <div>
+                    <div className="form-group">
                         <label className="block mb-1">Фамилия</label>
                         <input
                             type="text"
@@ -76,7 +77,7 @@ export default function RegisterForm() {
                             required
                         />
                     </div>
-                    <div>
+                    <div className="form-group">
                         <label className="block mb-1">Дата рождения</label>
                         <input
                             type="date"
@@ -86,7 +87,7 @@ export default function RegisterForm() {
                             required
                         />
                     </div>
-                    <div>
+                    <div className="form-group">
                         <label className="block mb-1">Номер телефона</label>
                         <input
                             type="tel"
@@ -96,7 +97,7 @@ export default function RegisterForm() {
                             required
                         />
                     </div>
-                    <div>
+                    <div className="form-group">
                         <label className="block mb-1">Email</label>
                         <input
                             type="email"
@@ -106,7 +107,7 @@ export default function RegisterForm() {
                             required
                         />
                     </div>
-                    <div>
+                    <div className="form-group">
                         <label className="block mb-1">Пароль</label>
                         <input
                             type="password"
@@ -116,7 +117,7 @@ export default function RegisterForm() {
                             required
                         />
                     </div>
-                    <div>
+                    <div className="form-group">
                         <label className="block mb-1">Подтвердите пароль</label>
                         <input
                             type="password"
@@ -126,10 +127,7 @@ export default function RegisterForm() {
                             required
                         />
                     </div>
-                    <button
-                        type="submit"
-                        className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
-                    >
+                    <button type="submit" className="btn-primary">
                         Зарегистрироваться
                     </button>
                 </form>

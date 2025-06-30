@@ -1,133 +1,196 @@
 import { useState, useEffect, type FormEvent } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import '../style/SpaceForm.css';
 
 interface Space {
-    id: number;
-    name: string;
-    address: string | null;
-    capacity: number;
-    description: string | null;
+  id: number;
+  name: string;
+  address: string | null;
+  capacity: number;
+  price_per_hour: number;
+  description: string | null;
+}
+
+interface Amenity {
+  id: number;
+  name: string;
 }
 
 export default function SpaceForm() {
-    const { id } = useParams<{ id: string }>();
-    const isEdit = Boolean(id);
-    const navigate = useNavigate();
-    const { isAdmin } = useAuth();
+  const { id } = useParams<{ id: string }>();
+  const isEdit = Boolean(id);
+  const { isAdmin } = useAuth();
 
-    const [name, setName] = useState('');
-    const [address, setAddress] = useState('');
-    const [capacity, setCapacity] = useState<number>(1);
-    const [description, setDescription] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+  const [name, setName] = useState('');
+  const [address, setAddress] = useState('');
+  const [capacity, setCapacity] = useState<number>(1);
+  const [description, setDescription] = useState('');
+  const [pricePerHour, setPricePerHour] = useState<number>(0);
+  
+  const [amenitiesList, setAmenitiesList] = useState<Amenity[]>([]);
+  const [selectedAmenities, setSelectedAmenities] = useState<number[]>([]);
 
-    useEffect(() => {
-        if (isEdit) {
-            setLoading(true);
-            fetch(`http://localhost:3000/spaces/${id}`, {
-                credentials: 'include',
-            })
-                .then(res => {
-                    if (!res.ok) throw new Error('Не удалось загрузить данные');
-                    return res.json();
-                })
-                .then((data: Space) => {
-                    setName(data.name);
-                    setAddress(data.address || '');
-                    setCapacity(data.capacity);
-                    setDescription(data.description || '');
-                })
-                .catch(err => setError(err.message))
-                .finally(() => setLoading(false));
-        }
-    }, [id]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-        setError(null);
-        setLoading(true);
+  useEffect(() => {
+    if (isEdit) {
+      setLoading(true);
+      fetch(`http://localhost:3000/spaces/${id}`, {
+        credentials: 'include',
+      })
+        .then(res => {
+          if (!res.ok) throw new Error('Не удалось загрузить данные');
+          return res.json();
+        })
+        .then((data: Space & { amenities?: { amenity_id?: number; id?: number }[] }) => {
+          setName(data.name);
+          setAddress(data.address || '');
+          setCapacity(data.capacity);
+          setDescription(data.description || '');
+          setPricePerHour(data.price_per_hour);
+          // Map by amenity_id if present, otherwise by id
+          setSelectedAmenities(
+            data.amenities?.map(a => (a.amenity_id !== undefined ? a.amenity_id : a.id!)) || []
+          );
+        })
+        .catch(err => setError(err.message))
+        .finally(() => setLoading(false));
+    }
+  }, [id]);
 
-        const payload = { name, address, capacity, description };
-        const base = isAdmin ? 'http://localhost:3000/admin/spaces' : 'http://localhost:3000/spaces';
-        const url = isEdit
-            ? `${base}/${id}`
-            : base;
-        const method = isEdit ? 'PUT' : 'POST';
+  useEffect(() => {
+    fetch('http://localhost:3000/amenities', { credentials: 'include' })
+      .then(res => res.json())
+      .then((list: Amenity[]) => setAmenitiesList(list))
+      .catch(console.error);
+  }, []);
 
-        try {
-            const res = await fetch(url, {
-                method,
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify(payload),
-            });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.error || 'Ошибка сохранения');
-            navigate(isAdmin ? '/admin/spaces' : '/spaces');
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
 
-    return (
-        <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow rounded">
-            <h2 className="text-2xl mb-4">
-                {isEdit ? 'Редактировать пространство' : 'Создать пространство'}
-            </h2>
-            {error && <div className="text-red-600 mb-4">{error}</div>}
-            {loading && <div className="text-center mb-4">Loading...</div>}
-            {!loading && (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block mb-1">Name</label>
-                        <input
-                            type="text"
-                            className="w-full border rounded px-3 py-2"
-                            value={name}
-                            onChange={e => setName(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="block mb-1">Address</label>
-                        <input
-                            type="text"
-                            className="w-full border rounded px-3 py-2"
-                            value={address}
-                            onChange={e => setAddress(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <label className="block mb-1">Capacity</label>
-                        <input
-                            type="number"
-                            className="w-full border rounded px-3 py-2"
-                            value={capacity}
-                            onChange={e => setCapacity(Number(e.target.value))}
-                            required
-                            min={1}
-                        />
-                    </div>
-                    <div>
-                        <label className="block mb-1">Description</label>
-                        <textarea
-                            className="w-full border rounded px-3 py-2"
-                            value={description}
-                            onChange={e => setDescription(e.target.value)}
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-                    >
-                        {isEdit ? 'Сохранить' : 'Создать'}
-                    </button>
-                </form>
-            )}
-        </div>
+  const toggleAmenity = (id: number) => {
+    setSelectedAmenities(prev =>
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
     );
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    const payload = {
+      name,
+      address,
+      capacity,
+      description,
+      price_per_hour: pricePerHour,
+      amenities: selectedAmenities
+    };
+    const base = isAdmin ? 'http://localhost:3000/admin/spaces' : 'http://localhost:3000/spaces';
+    const url = isEdit ? `${base}/${id}` : base;
+    const method = isEdit ? 'PUT' : 'POST';
+
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Ошибка сохранения');
+      window.location.href = 'http://localhost:5173/spaces';
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow rounded space-form">
+      <h2 className="text-2xl mb-4">
+        {isEdit ? 'Редактировать пространство' : 'Создать пространство'}
+      </h2>
+      {error && <div className="text-red-600 mb-4">{error}</div>}
+      {loading && <div className="text-center mb-4">Loading...</div>}
+      {!loading && (
+        <form onSubmit={handleSubmit} className="space-form">
+          <div className="form-group">
+            <label className="block mb-1">Название</label>
+            <input
+              type="text"
+              className="form-group__input"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label className="block mb-1">Адрес</label>
+            <input
+              type="text"
+              className="form-group__input"
+              value={address}
+              onChange={e => setAddress(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label className="block mb-1">Вместимость</label>
+            <input
+              type="number"
+              className="form-group__input"
+              value={capacity}
+              onChange={e => setCapacity(Number(e.target.value))}
+              required
+              min={1}
+            />
+          </div>
+          <div className="form-group">
+            <label className="block mb-1">Цена в час</label>
+            <input
+              type="number"
+              step="0.01"
+              className="form-group__input"
+              value={pricePerHour}
+              onChange={e => setPricePerHour(Number(e.target.value))}
+              required
+              min={0}
+            />
+          </div>
+          <div className="form-group">
+            <label className="block mb-1">Описание</label>
+            <textarea
+              className="form-group__input"
+              value={description}
+              onChange={e => setDescription(e.target.value)}
+            />
+          </div>
+          <fieldset className="space-form__amenities mb-4">
+            <legend className="block mb-2 font-medium">Удобства</legend>
+            <div className="grid grid-cols-2 gap-2">
+              {amenitiesList.map(a => (
+                <label key={a.id}>
+                  <input
+                    type="checkbox"
+                    className="space-form__checkbox"
+                    checked={selectedAmenities.includes(a.id)}
+                    onChange={() => toggleAmenity(a.id)}
+                  />
+                  <span>{a.name}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <button
+            type="submit"
+            className="btn-primary"
+          >
+            {isEdit ? 'Сохранить' : 'Создать'}
+          </button>
+        </form>
+      )}
+    </div>
+  );
 }

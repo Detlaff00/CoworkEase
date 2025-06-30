@@ -18,6 +18,7 @@ interface Booking {
     booking_date?: string;
     start_time: string;
     end_time: string;
+    cost: number;
     user_name?: string;
     user_email?: string;
 }
@@ -123,6 +124,10 @@ export default function BookingsListPage() {
                                         ? endTime.slice(0,5)
                                         : '—'}
                                 </div>
+                            </div>
+                            <div>
+                              <div className="text-xs text-gray-500">Стоимость</div>
+                              <div className="text-sm">{b.cost} ₽</div>
                             </div>
                         </div>
                         <div className="flex justify-end mt-4">

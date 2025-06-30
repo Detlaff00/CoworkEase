@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
@@ -18,7 +18,7 @@ export default function AdminSpacesPage() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetch('http://localhost:3000/admin/spaces', { credentials: 'include' })
+        fetch('http://localhost:3000/spaces', { credentials: 'include' })
             .then(async res => {
                 if (!res.ok) {
                     const data = await res.json();
@@ -34,7 +34,7 @@ export default function AdminSpacesPage() {
     const handleDelete = async (id: number) => {
         if (!window.confirm('Удалить пространство?')) return;
         try {
-            const res = await fetch(`http://localhost:3000/admin/spaces/${id}`, {
+            const res = await fetch(`http://localhost:3000/spaces/${id}`, {
                 method: 'DELETE',
                 credentials: 'include'
             });
@@ -56,47 +56,28 @@ export default function AdminSpacesPage() {
         <div className="p-6">
             <div className="flex justify-between items-center mb-4">
                 <h1 className="text-2xl">Admin Spaces</h1>
-                <Link
-                    to="/admin/spaces/new"
-                    className="bg-green-600 text-white px-4 py-2 rounded"
-                >
-                    + Create Space
-                </Link>
             </div>
 
-            <table className="min-w-full bg-white shadow rounded">
-                <thead className="bg-gray-100">
-                    <tr>
-                        <th className="px-4 py-2">ID</th>
-                        <th className="px-4 py-2">Name</th>
-                        <th className="px-4 py-2">Capacity</th>
-                        <th className="px-4 py-2">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {spaces.map(s => (
-                        <tr key={s.id} className="border-t">
-                            <td className="px-4 py-2">{s.id}</td>
-                            <td className="px-4 py-2">{s.name}</td>
-                            <td className="px-4 py-2">{s.capacity}</td>
-                            <td className="px-4 py-2 space-x-2">
-                                <Link
-                                    to={`/admin/spaces/${s.id}/edit`}
-                                    className="text-blue-600 hover:underline"
-                                >
-                                    Edit
-                                </Link>
-                                <button
-                                    onClick={() => handleDelete(s.id)}
-                                    className="text-red-600 hover:underline"
-                                >
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {spaces.map(space => (
+                    <div key={space.id} className="bg-white rounded-lg shadow p-4 flex flex-col">
+                        <div className="flex-1">
+                            <h2 className="text-xl font-semibold mb-2">{space.name}</h2>
+                            {space.address && (
+                                <p className="text-gray-500 text-sm mb-2">📍 {space.address}</p>
+                            )}
+                            <p className="text-gray-700 mb-4">Вместимость: {space.capacity}</p>
+                            {space.description && (
+                                <p className="text-gray-600 mb-4">{space.description}</p>
+                            )}
+                        </div>
+                        <div className="mt-auto flex justify-between items-center">
+                          
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }
+ 

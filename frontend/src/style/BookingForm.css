@@ -1,14 +1,12 @@
-
-
 /* Booking Form Container */
 .booking-form {
-  max-width: 500px;
+  max-width: 800px;
   margin: 2rem auto;
-  padding: 1.5rem;
+  padding: 2rem;
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 20px;
-  box-shadow: 0 5px 15px var(--shadow);
+  border-radius: 8px;
+  /* box-shadow: 0 5px 15px var(--shadow); */
 }
 
 /* Form Title */
@@ -41,33 +39,35 @@
 /* Input, Select, Date/Time Fields */
 .form-group__input {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 1rem 1.25rem;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 8px;
   background: var(--bg-secondary);
   color: var(--text-primary);
   transition: border 0.3s ease;
+  font-size: 1rem;
 }
 
 .form-group__input:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  box-shadow: none;
 }
 
 /* Primary Submit Button */
 .btn-primary {
   display: block;
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 1rem 1.5rem;
   background: var(--accent);
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   font-weight: 600;
   text-align: center;
   cursor: pointer;
   transition: background 0.3s ease;
+  font-size: 1rem;
 }
 
 .btn-primary:hover {

@@ -1,0 +1,47 @@
+.bookings-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 4rem;
+  font-family: inherit;
+  background: var(--bg-card);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px var(--shadow);
+  overflow: hidden;
+}
+
+.bookings-table th,
+.bookings-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.bookings-table thead tr {
+  background: var(--accent);
+}
+.bookings-table thead th {
+  color: #fff;
+}
+
+.bookings-table thead th:first-child {
+  border-top-left-radius: 8px;
+}
+.bookings-table thead th:last-child {
+  border-top-right-radius: 8px;
+}
+
+.bookings-table tbody tr:nth-child(odd) {
+  background: var(--bg-secondary);
+}
+
+.bookings-table tbody tr:hover {
+  background: var(--accent-hover);
+  color: #fff;
+}
+
+.bookings-table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 8px;
+}
+.bookings-table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 8px;
+}

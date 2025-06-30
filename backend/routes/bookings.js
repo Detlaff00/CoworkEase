@@ -28,6 +28,7 @@ router.post('/', auth, validate(bookingSchema), async (req, res) => {
     const conflict = await pool.query(
       `SELECT id FROM bookings
        WHERE space_id = $1
+         AND status <> 'cancelled'
          AND booking_date = $2
          AND NOT ($4 <= start_time OR $3 >= end_time)`,
       [space_id, booking_date, startTimeOnly, endTimeOnly]
@@ -35,12 +36,26 @@ router.post('/', auth, validate(bookingSchema), async (req, res) => {
     if (conflict.rows.length) {
       return res.status(409).json({ error: 'Выбранное время уже занято' });
     }
+    // Calculate cost based on space price_per_hour
+    const spaceRes = await pool.query(
+      'SELECT price_per_hour FROM spaces WHERE id = $1',
+      [space_id]
+    );
+    if (!spaceRes.rows.length) {
+      return res.status(404).json({ error: 'Пространство не найдено' });
+    }
+    const pricePerHour = parseFloat(spaceRes.rows[0].price_per_hour);
+    // Compute duration in hours
+    const startDate = new Date(start_time);
+    const endDate = new Date(end_time);
+    const durationHours = (endDate - startDate) / 1000 / 3600;
+    const cost = parseFloat((durationHours * pricePerHour).toFixed(2));
     // Вставляем новую бронь
     const result = await pool.query(
-      `INSERT INTO bookings (space_id, user_id, booking_date, start_time, end_time)
-       VALUES ($1, $2, $3, $4, $5)
+      `INSERT INTO bookings (space_id, user_id, booking_date, start_time, end_time, cost)
+       VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING *;`,
-      [space_id, req.user.id, booking_date, startTimeOnly, endTimeOnly]
+      [space_id, req.user.id, booking_date, startTimeOnly, endTimeOnly, cost]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
@@ -62,7 +77,15 @@ router.get('/', auth, async (req, res) => {
     `);
 
     const result = await pool.query(
-      `SELECT b.*, s.name AS space_name
+      `SELECT
+         b.id,
+         b.space_id,
+         s.name AS space_name,
+         b.booking_date,
+         b.start_time,
+         b.end_time,
+         b.cost,
+         b.status
        FROM bookings b
        JOIN spaces s ON b.space_id = s.id
        WHERE b.user_id = $1
@@ -121,6 +144,7 @@ router.get('/history', auth, async (req, res) => {
          b.booking_date,
          b.start_time,
          b.end_time,
+         b.cost,
          b.status
        FROM bookings b
        JOIN spaces s ON b.space_id = s.id
