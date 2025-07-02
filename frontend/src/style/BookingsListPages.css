@@ -1,7 +1,7 @@
 /* Container for the bookings page */
 .bookings-page {
   background: var(--bg-primary);
-  padding: 2rem;
+  padding: 5rem;
   min-height: 100vh;
   width: 80%;
   margin: 0 auto;

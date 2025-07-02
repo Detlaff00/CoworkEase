@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Joi = require('joi');
 const validate = require('../middleware/validate');
+const auth = require('../middleware/auth');
 
 const registerSchema = Joi.object({
   first_name: Joi.string().min(1).required(),
@@ -22,6 +23,11 @@ const registerSchema = Joi.object({
 const loginSchema = Joi.object({
   email:    Joi.string().email().required(),
   password: Joi.string().min(6).required()
+});
+
+const changePasswordSchema = Joi.object({
+  oldPassword: Joi.string().min(6).required(),
+  newPassword: Joi.string().min(6).required()
 });
 
 // Регистрация
@@ -106,6 +112,35 @@ router.post('/login', validate(loginSchema), async (req, res) => {
 router.post('/logout', (req, res) => {
     res.clearCookie('token');
     res.json({ message: 'Выход выполнен' });
+});
+
+// Изменение пароля
+router.post('/change-password', auth, validate(changePasswordSchema), async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  try {
+    // Проверяем текущий хеш пароля
+    const userRes = await pool.query(
+      'SELECT password_hash FROM users WHERE id = $1',
+      [req.user.id]
+    );
+    if (!userRes.rows.length) {
+      return res.status(404).json({ error: 'Пользователь не найден' });
+    }
+    const match = await bcrypt.compare(oldPassword, userRes.rows[0].password_hash);
+    if (!match) {
+      return res.status(400).json({ error: 'Неверный текущий пароль' });
+    }
+    // Хешируем и обновляем новый пароль
+    const hash = await bcrypt.hash(newPassword, 10);
+    await pool.query(
+      'UPDATE users SET password_hash = $1 WHERE id = $2',
+      [hash, req.user.id]
+    );
+    res.json({ message: 'Пароль успешно изменён' });
+  } catch (err) {
+    console.error('Change password error:', err);
+    res.status(500).json({ error: 'Не удалось изменить пароль' });
+  }
 });
 
 module.exports = router;

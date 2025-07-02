@@ -1,5 +1,5 @@
 import { useState, useEffect, type FormEvent } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import '../style/SpaceForm.css';
 
@@ -21,6 +21,7 @@ export default function SpaceForm() {
   const { id } = useParams<{ id: string }>();
   const isEdit = Boolean(id);
   const { isAdmin } = useAuth();
+  const navigate = useNavigate();
 
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
@@ -100,7 +101,7 @@ export default function SpaceForm() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Ошибка сохранения');
-      window.location.href = 'http://localhost:5173/spaces';
+      navigate('/spaces');
     } catch (err: any) {
       setError(err.message);
     } finally {

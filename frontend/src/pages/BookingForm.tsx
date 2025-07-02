@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useState, useMemo, type FormEvent } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import '../style/BookingForm.css';
 
@@ -46,6 +46,21 @@ export default function BookingForm() {
       setDate(new Date().toISOString().split('T')[0]);
     }, []);
 
+    // Generate 30-minute interval time options from 08:00 to 23:00
+    const timeOptions = useMemo(() => {
+      const opts: string[] = [];
+      for (let h = 8; h <= 23; h++) {
+        [0, 30].forEach(min => {
+          // allow up to 23:00 only
+          if (h === 23 && min > 0) return;
+          const hh = String(h).padStart(2, '0');
+          const mm = String(min).padStart(2, '0');
+          opts.push(`${hh}:${mm}`);
+        });
+      }
+      return opts;
+    }, []);
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         if (!spaceId || !startTime || !endTime || !date) {
@@ -60,9 +75,32 @@ export default function BookingForm() {
         }
         // Prevent end time earlier than start time
         const selectedEnd = new Date(`${date}T${endTime}`);
+
+        // Restrict booking window from 08:00 to 23:00
+        const earliest = new Date(`${date}T08:00`);
+        const latest = new Date(`${date}T23:00`);
+        if (selectedStart < earliest || selectedEnd > latest) {
+          setError('Бронирование доступно только с 08:00 до 23:00');
+          setLoading(false);
+          return;
+        }
+
         if (selectedEnd <= selectedStart) {
             setError('Время окончания должно быть позже времени начала');
             return;
+        }
+        // Ensure minutes are multiples of 30 and duration is a multiple of 30 minutes
+        const startMinutes = selectedStart.getMinutes();
+        const endMinutes = selectedEnd.getMinutes();
+        const durationMs = selectedEnd.getTime() - selectedStart.getTime();
+        if (
+          (startMinutes % 30) !== 0 ||
+          (endMinutes % 30) !== 0 ||
+          (durationMs % (30 * 60 * 1000)) !== 0
+        ) {
+          setError('Время должно быть кратно 30 минутам и длиться кратно 30 минут');
+          setLoading(false);
+          return;
         }
 
         setError(null);
@@ -131,23 +169,31 @@ export default function BookingForm() {
                   </div>
                   <div className="form-group">
                     <label className="form-group__label">Начало</label>
-                    <input
-                      type="time"
+                    <select
                       className="form-group__input"
                       value={startTime}
                       onChange={e => setStartTime(e.target.value)}
                       required
-                    />
+                    >
+                      <option value="">Выберите время</option>
+                      {timeOptions.map(t => (
+                        <option key={t} value={t}>{t}</option>
+                      ))}
+                    </select>
                   </div>
                   <div className="form-group">
                     <label className="form-group__label">Конец</label>
-                    <input
-                      type="time"
+                    <select
                       className="form-group__input"
                       value={endTime}
                       onChange={e => setEndTime(e.target.value)}
                       required
-                    />
+                    >
+                      <option value="">Выберите время</option>
+                      {timeOptions.map(t => (
+                        <option key={t} value={t}>{t}</option>
+                      ))}
+                    </select>
                   </div>
                 </div>
                 <button

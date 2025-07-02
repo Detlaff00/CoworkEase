@@ -165,6 +165,7 @@ export default function ProfilePage() {
             <h2 >Смена пароля</h2>
             {pwdError && <div >{pwdError}</div>}
             <form
+              className="form-group"
               onSubmit={async e => {
                 e.preventDefault();
                 setPwdError(null);
@@ -189,41 +190,45 @@ export default function ProfilePage() {
                 }
               }}
             >
-              <div>
+              <div className="form-group">
                 <label>Старый пароль</label>
                 <input
                   type="password"
                   value={oldPassword}
                   onChange={e => setOldPassword(e.target.value)}
                   required
+                  className="form-group__input"
                 />
               </div>
-              <div>
+              <div className="form-group">
                 <label>Новый пароль</label>
                 <input
                   type="password"
                   value={newPassword}
                   onChange={e => setNewPassword(e.target.value)}
                   required
+                  className="form-group__input"
                 />
               </div>
-              <div>
+              <div className="form-group">
                 <label >Подтвердите новый пароль</label>
                 <input
                   type="password"
                   value={confirmNewPassword}
                   onChange={e => setConfirmNewPassword(e.target.value)}
                   required
+                  className="form-group__input"
                 />
               </div>
-              <div>
+              <div className="form-actions">
                 <button
                   type="button"
                   onClick={() => setShowPwdModal(false)}
+                  className="btn-secondary"
                 >
                   Отмена
                 </button>
-                <button type="submit">
+                <button type="submit" className="btn-primary">
                   Сменить
                 </button>
               </div>
