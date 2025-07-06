@@ -1,4 +1,4 @@
-/* Root layout container */
+
 .layout {
   display: flex;
   flex-direction: column;
@@ -6,7 +6,7 @@
   background: var(--bg-secondary);
 }
 
-/* Header and navigation */
+
 .layout-header {
   background: var(--bg-primary);
   box-shadow: 0 2px 8px var(--shadow);
@@ -30,7 +30,6 @@
   color: var(--accent);
 }
 
-/* Main content area */
 .layout-main {
   flex: 1;
   max-width: 1200px;
@@ -38,7 +37,7 @@
   padding: 1rem;
 }
 
-/* Footer */
+
 .layout-footer {
   background: var(--bg-primary);
   text-align: center;
@@ -47,7 +46,7 @@
   font-size: 0.875rem;
 }
 
-/* Utility container */
+
 .container {
   width: 100%;
   max-width: 1200px;
@@ -55,7 +54,7 @@
   padding: 0 1rem;
 }
 
-/* Profile dropdown styling */
+
 .profile-container {
   position: relative;
 }
@@ -99,7 +98,7 @@
   border-radius: 4px;
 }
 
-/* Header auth buttons styling */
+
 .nav-actions .auth-buttons {
   display: flex;
   gap: 0.5rem;
@@ -116,7 +115,7 @@
   transition: background 0.2s ease, color 0.2s ease;
 }
 
-/* Login button: outline style */
+
 .nav-actions .auth-buttons .btn-login {
   background: transparent;
   color: var(--accent);
@@ -127,7 +126,7 @@
   color: var(--bg-primary);
 }
 
-/* Register button: filled style */
+
 .nav-actions .auth-buttons .btn-register {
   background: var(--accent);
   color: var(--bg-primary);

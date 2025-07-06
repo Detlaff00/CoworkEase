@@ -1,4 +1,4 @@
-/* HomePage layout */
+
 .main {
   display: flex;
   justify-content: center;
@@ -21,7 +21,7 @@
   margin-bottom: 1.5rem;
 }
 
-/* Search bar and input */
+
 .search-bar {
   position: relative;
   width: 100%;
@@ -37,7 +37,7 @@
   border-radius: 0.375rem;
 }
 
-/* Suggestions dropdown */
+
 .suggestions-list {
   position: absolute;
   top: 100%;

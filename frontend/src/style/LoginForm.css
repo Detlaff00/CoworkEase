@@ -1,4 +1,4 @@
-/* Login form container styling */
+
 .register-form {
   max-width: 500px;
   margin: 2rem auto;
@@ -10,7 +10,7 @@
   font-family: inherit;
 }
 
-/* Form title */
+
 .register-form h2 {
   font-size: 2rem;
   font-weight: 700;
@@ -18,12 +18,12 @@
   margin-bottom: 1.5rem;
 }
 
-/* Form groups */
+
 .register-form .form-group {
   margin-bottom: 1.5rem;
 }
 
-/* Labels */
+
 .register-form label {
   display: block;
   margin-bottom: 0.5rem;
@@ -32,7 +32,7 @@
   font-size: 1rem;
 }
 
-/* Inputs */
+
 .register-form input {
   width: 100%;
   padding: 0.75rem 1rem;
@@ -56,7 +56,7 @@
   box-shadow: 0 0 0 3px var(--accent-hover);
 }
 
-/* Primary and secondary buttons */
+
 .register-form .btn-primary,
 .register-form .btn-secondary {
   display: block;

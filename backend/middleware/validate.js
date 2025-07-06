@@ -1,12 +1,6 @@
-
-
-// backend/middleware/validate.js
 const Joi = require('joi');
 
-/**
- * Middleware generator for validating req.body against a Joi schema.
- * @param {Joi.ObjectSchema} schema - Joi schema to validate against.
- */
+
 function validate(schema) {
   return (req, res, next) => {
     const { error } = schema.validate(req.body, { abortEarly: false });

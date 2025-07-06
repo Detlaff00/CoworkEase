@@ -242,7 +242,7 @@ export default function ProfilePage() {
             <h1 className="page-title">Личный кабинет</h1>
             <p className="page-subtitle">Управляйте своим профилем и бронированиями</p>
           </div>
-        {/* Profile Card */}
+       
         <div className="profile-card fade-in">
           <div className="profile-header">
             <div className="profile-avatar">
@@ -277,7 +277,7 @@ export default function ProfilePage() {
             </button>
           </div>
         </div>
-        {/* Content Section for future tabs */}
+     
         <div className="content-section fade-in">
           <div className="tabs">
             <div

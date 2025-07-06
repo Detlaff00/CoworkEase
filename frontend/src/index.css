@@ -1,4 +1,4 @@
-/* Сброс и typography */
+
 * {
   margin: 0;
   padding: 0;
@@ -17,7 +17,6 @@ body {
   min-height: 100vh;
 }
 
-/* Цветовые переменные */
 :root {
   --bg-primary: #fafafa;
   --bg-secondary: #ffffff;
@@ -30,7 +29,7 @@ body {
   --shadow: rgba(0, 0, 0, 0.1);
   --nav-bg: rgba(250, 250, 250, 0.8);
 }
-/* тёмная тема по data-theme атрибуту */
+
 .dark {
   --bg-primary: #0f0f0f;
   --bg-secondary: #1a1a1a;
@@ -44,7 +43,7 @@ body {
   --nav-bg: rgba(15, 15, 15, 0.8);
 }
 
-/* Навигация */
+
 .nav {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -146,7 +145,7 @@ body {
   box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
 }
 
-/* Сетка карточек */
+
 .coworkings-section {
   padding: 4rem 2rem;
 }
@@ -163,7 +162,7 @@ body {
   grid-template-columns: repeat(auto-fill,minmax(350px,1fr));
   gap: 2rem;
 }
-/* Карточка */
+
 .coworking-card {
   background: var(--bg-card);
   border-radius: 20px;
@@ -244,12 +243,12 @@ body {
 }
 
 .profile-dropdown {
-  background: var(--bg-card);      /* светлый фон */
-  color: var(--text-primary);      /* тёмный текст */
-  /* остальные ваши правила… */
+  background: var(--bg-card);      
+  color: var(--text-primary);      
+ 
 }
 .profile-dropdown button {
-  color: var(--text-primary);      /* чтобы кнопки внутри были чёрными */
+  color: var(--text-primary);      
 }
 
 .profile-dropdown button {
@@ -264,7 +263,7 @@ body {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.2s ease, visibility 0.2s ease;
-  /* прочие свойства (фон, тень и т.д.) оставьте */
+ 
 }
 .profile-container:hover .profile-dropdown,
 .profile-dropdown:hover {

@@ -18,9 +18,8 @@ router.post('/', auth, validate(bookingSchema), async (req, res) => {
   if (!space_id || !start_time || !end_time) {
     return res.status(400).json({ error: 'space_id, start_time и end_time обязательны' });
   }
-  // Derive booking_date from start_time
   const booking_date = start_time.split('T')[0];
-  // Extract only time part for time columns
+
   const startTimeOnly = start_time.split('T')[1];
   const endTimeOnly = end_time.split('T')[1];
   try {

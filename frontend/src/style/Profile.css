@@ -1,6 +1,6 @@
-/* Container for main content */
+
 .main {
-  padding-top: 0;     /* Removed extra top spacing */
+  padding-top: 0;     
   min-height: 100vh;
   max-width: 100%;
   margin: 0 auto;
@@ -8,10 +8,9 @@
   padding-right: 2rem;
 }
 
-/* Page header */
+
 .page-header {
   padding: 1.5rem 0;
-  /* border-bottom removed */
   margin-bottom: 1rem;
 }
 .page-title {
@@ -25,7 +24,7 @@
   font-size: 1.25rem;
 }
 
-/* Dashboard grid layout */
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -34,7 +33,7 @@
   align-items: start;
 }
 
-/* Profile card */
+
 .profile-card {
   background: var(--bg-card);
   border-radius: 25px;
@@ -54,7 +53,7 @@
   }
 }
 
-/* Profile header */
+
 .profile-header {
   text-align: center;
   margin-bottom: 2rem;
@@ -84,7 +83,7 @@
   font-size: 1rem;
 }
 
-/* Profile stats */
+
 .profile-stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -108,7 +107,7 @@
   color: var(--text-secondary);
 }
 
-/* Profile actions */
+
 .profile-actions {
   display: flex;
   flex-direction: column;
@@ -142,7 +141,7 @@
   color: var(--accent);
 }
 
-/* Content section with tabs */
+
 .content-section {
   background: var(--bg-card);
   border-radius: 25px;
@@ -175,7 +174,7 @@
   color: var(--accent);
 }
 
-/* Tab content visibility */
+
 .tab-content {
   display: none;
 }
@@ -184,7 +183,7 @@
   animation: fadeIn 0.3s ease;
 }
 
-/* Booking list and card styling */
+
 .booking-list {
   display: flex;
   flex-direction: column;
@@ -203,7 +202,7 @@
   box-shadow: 0 5px 15px var(--shadow);
 }
 
-/* Inside each card, align header and details */
+
 .booking-card .booking-header {
   display: flex;
   justify-content: space-between;
@@ -228,7 +227,6 @@
   gap: 1rem;
 }
 
-/* Modal overlay and content for password change */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -271,7 +269,7 @@
   color: var(--text-primary);
 }
 
-/* Style modal buttons with site accent */
+
 .modal-content button {
   background: white;
   color: var(--accent);
@@ -283,12 +281,12 @@
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* Hover effect for modal buttons */
+
 .modal-content button:hover {
   background: var(--accent);
   color: white;
 }
-/* Status badges */
+
 .booking-status {
   display: inline-block;
   padding: 0.5rem 1rem;
@@ -298,14 +296,14 @@
   text-transform: uppercase;
 }
 
-/* Green for "Началось" */
+
 .status-started {
   background: rgba(16, 185, 129, 0.1);
   color:  #10B981;
   
 }
 
-/* Purple for "Завершено" */
+
 .status-completed {
   background: rgba(99, 102, 241, 0.1);
   color:#6366F1;
@@ -313,14 +311,14 @@
 
  
 
-/* Red for "Отменено" */
+
 .status-cancelled {
   background: rgba(239, 68, 68, 0.1);
   color: #EF4444; 
 }
 
 
-/* Custom toggle switches */
+
 input[type="checkbox"] {
   -webkit-appearance: none;
   appearance: none;
@@ -366,7 +364,7 @@ label {
 }
 
  
-/* Settings tab improvements */
+
 .settings-group {
   margin-bottom: 2rem;
 }
@@ -396,17 +394,17 @@ label {
   font-size: 1.25rem;
   margin-bottom: 1rem;
 }
-/* Stretch the "Потрачено" stat to span two columns */
+
 .profile-stats .stat-item:last-child {
   grid-column: 1 / -1;
 }
 
-/* Ensure the page header spans both columns in the dashboard grid */
+
 .dashboard-grid .page-header {
   grid-column: 1 / -1;
   margin-bottom: 2rem;
 }
-/* Delete profile button styling */
+
 .profile-actions .btn-secondary {
   font-size: 1rem;
   transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
@@ -417,7 +415,6 @@ label {
   border-color: var(--accent);
 }
 
-/* Ensure booking cards stack full-width in profile */
 .content-section .tab-content.active {
   display: flex;
   flex-direction: column;
@@ -427,7 +424,7 @@ label {
   width: 100%;
   max-width: none;
 }
-/* Profile bookings: list items stacked full-width */
+
 .content-section .booking-list {
   display: flex;
   flex-direction: column;
@@ -439,7 +436,7 @@ label {
   max-width: none;
 }
 
-/* Modal form styling like registration/login */
+
 .modal-content form {
   display: flex;
   flex-direction: column;
