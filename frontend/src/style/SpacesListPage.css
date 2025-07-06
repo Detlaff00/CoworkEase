@@ -17,9 +17,10 @@
 }
 .card-image {
   height: 200px;
-  background: linear-gradient(135deg, var(--accent), #8b5cf6);
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
   display: flex; align-items: center; justify-content: center;
-  font-size: 3rem; color: white;
+  font-size: 3rem;
+  color: var(--bg-primary);
 }
 .card-content {
   padding: 1.5rem;
@@ -204,19 +205,19 @@
 }
 .coworking-card .card-actions .edit-btn:hover {
   background: var(--accent);
-  color: #fff;
+  color: var(--bg-primary);
 }
 
 /* Delete button */
 .coworking-card .card-actions .delete-btn {
   background: transparent;
-  border: 1px solid #e53e3e;
-  color: #e53e3e;
+  border: 1px solid var(--accent);
+  color: var(--accent);
   border-radius: 8px;
 }
 .coworking-card .card-actions .delete-btn:hover {
-  background: #e53e3e;
-  color: #fff;
+  background: var(--accent);
+  color: var(--bg-primary);
 }
 
 .coworking-card .card-actions .edit-btn,
@@ -241,4 +242,122 @@
 }
 .modal-content .card-stats .stat-item {
   flex: 1 !important;
+}
+.filters {
+  display: grid;
+  align-items: stretch;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 4rem !important;
+}
+
+/* Individual filter group */
+.filters .filter-group {
+  background: var(--bg-card);
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+/* Labels inside filter group */
+.filters .filter-group label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+}
+
+/* Checkbox spacing */
+.filters .filter-group input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+/* Price filter input styling */
+.filters .filter-group input[type="number"] {
+  width: 100%;
+  max-width: 100px;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.filters .filter-group input[type="number"]:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-hover);
+}
+
+/* Price filter layout */
+.filters .filter-group .price-range {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.filters .filter-group.amenities-filter {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+/* Price filter group: arrange inputs in a row */
+.filters .filter-group:nth-child(2) {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 0.5rem;
+  height: auto !important;
+}
+/* Hide native number input arrows for price filters */
+.filters .filter-group input[type="number"]::-webkit-outer-spin-button,
+.filters .filter-group input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.filters .filter-group input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Move the filters toggle button slightly upward */
+button.btn-secondary.mt-6.mb-8 {
+  margin-top: 0.5rem !important;
+  margin-bottom: 1rem !important;
+}
+/* Push coworking cards downward below filters */
+.coworkings-grid {
+  margin-top: 4rem !important;
+}
+
+/* Ensure filter toggle remains on top */
+.filter-toggle-button {
+  position: relative;
+  z-index: 100;
+}
+/* Smooth transition for filters panel */
+.filters {
+  overflow: hidden;
+  transition: opacity 0.3s ease, transform 0.3s ease, max-height 0.3s ease;
+}
+.filters-hidden {
+  opacity: 0;
+  transform: translateY(-10px);
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-bottom: 0 !important;
+  pointer-events: none;
+}
+.filters-visible {
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 1000px; /* or a height large enough to contain all filters */
+  margin-bottom: 4rem !important;
+  pointer-events: auto;
 }

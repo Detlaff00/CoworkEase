@@ -5,7 +5,6 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const authMiddleware = require('./middleware/auth');
-
 const spaceRouter = require('./routes/spaces');
 const authRouter = require('./routes/auth');
 const pool = require('./db');
@@ -41,12 +40,10 @@ app.use(cookieParser());
 
 // Auth routes before other routers
 app.use('/auth', authRouter);
-
 app.use('/spaces', spaceRouter);
 app.use('/bookings', bookingRouter);
 app.use('/users', userRouter);
 app.use('/amenities', amenitiesRouter);
-
 app.use('/admin', adminRouter);
 
 // Public endpoint to fetch all amenities

@@ -110,25 +110,18 @@ router.get('/:id', async (req, res) => {
         s.price_per_hour,
         s.description,
         COALESCE(
-          json_agg(
-            DISTINCT json_build_object(
+          jsonb_agg(
+            DISTINCT jsonb_build_object(
               'amenity_id', a.id,
               'name', a.name,
               'is_available', sa.is_available
             )
           ) FILTER (WHERE a.id IS NOT NULL),
-          '[]'
-        ) AS amenities,
-        COALESCE(
-          json_agg(
-            DISTINCT si.url
-          ) FILTER (WHERE si.url IS NOT NULL),
-          '[]'
-        ) AS images
+          '[]'::jsonb
+        ) AS amenities
       FROM spaces s
       LEFT JOIN space_amenities sa ON sa.space_id = s.id
       LEFT JOIN amenities a ON a.id = sa.amenity_id
-      LEFT JOIN space_images si ON si.space_id = s.id
       WHERE s.id = $1
       GROUP BY s.id;
     `, [id]);

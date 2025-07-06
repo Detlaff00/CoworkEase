@@ -51,7 +51,7 @@
 .form-group__input:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: none;
+  box-shadow: 0 0 0 3px var(--accent-hover);
 }
 
 /* Primary Submit Button */
@@ -60,7 +60,7 @@
   width: 100%;
   padding: 1rem 1.5rem;
   background: var(--accent);
-  color: white;
+  color: var(--bg-primary);
   border: none;
   border-radius: 8px;
   font-weight: 600;

@@ -18,7 +18,9 @@ interface Amenity {
 }
 
 export default function SpaceForm() {
-  const { id } = useParams<{ id: string }>();
+  // Support both 'id' and 'spaceId' as URL params
+  const params = useParams<{ id?: string; spaceId?: string }>();
+  const id = params.id ?? params.spaceId;
   const isEdit = Boolean(id);
   const { isAdmin } = useAuth();
   const navigate = useNavigate();
@@ -36,7 +38,7 @@ export default function SpaceForm() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isEdit) {
+    if (isEdit && id) {
       setLoading(true);
       fetch(`http://localhost:3000/spaces/${id}`, {
         credentials: 'include',
@@ -59,7 +61,7 @@ export default function SpaceForm() {
         .catch(err => setError(err.message))
         .finally(() => setLoading(false));
     }
-  }, [id]);
+  }, [id, isEdit]);
 
   useEffect(() => {
     fetch('http://localhost:3000/amenities', { credentials: 'include' })

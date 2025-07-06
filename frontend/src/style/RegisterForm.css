@@ -53,14 +53,14 @@
 .register-form textarea:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(144, 238, 144, 0.3);
+  box-shadow: 0 0 0 3px var(--accent-hover);
 }
 
 .register-form .btn-primary {
   display: inline-block;
   padding: 0.75rem 2rem;
   background: var(--accent);
-  color: #fff;
+  color: var(--bg-primary);
   border: none;
   border-radius: 8px;
   font-weight: 600;

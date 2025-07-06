@@ -27,13 +27,7 @@ export default function HomePage() {
         <h1>Добро пожаловать на CoworkEase</h1>
         <p>Мы помогаем быстро находить и бронировать коворкинги в вашем городе.</p>
         <div className="search-bar">
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Введите название коворкинга"
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-          />
+          
           {suggestions.length > 0 && (
             <ul className="suggestions-list border bg-white mt-1">
               {suggestions.map(s => (

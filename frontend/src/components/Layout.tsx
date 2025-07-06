@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import '../style/Layout.css';
@@ -6,6 +7,20 @@ export default function Layout() {
   const navigate = useNavigate();
 
   const { profile, isAdmin } = useAuth();
+
+  // Theme toggling
+  const [darkTheme, setDarkTheme] = useState(() => {
+    return localStorage.getItem('theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (darkTheme) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('theme', darkTheme ? 'dark' : 'light');
+  }, [darkTheme]);
 
   async function handleLogout() {
     await fetch('http://localhost:3000/auth/logout', {
@@ -45,8 +60,13 @@ export default function Layout() {
 
           </ul>
           <div className="nav-actions">
-            <div className="theme-toggle" onClick={() => { }}>
-              <span id="theme-icon">🌙</span>
+            <div
+              className="theme-toggle"
+              onClick={() => setDarkTheme(prev => !prev)}
+            >
+              <span id="theme-icon">
+                {darkTheme ? '☀️' : '🌙'}
+              </span>
             </div>
             {!profile ? (
 

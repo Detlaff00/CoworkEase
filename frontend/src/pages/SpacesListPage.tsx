@@ -25,6 +25,19 @@ export default function SpacesListPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedSpace, setSelectedSpace] = useState<Space | null>(null);
+  // Filters state
+  const [amenitiesList, setAmenitiesList] = useState<Amenity[]>([]);
+  const [selectedAmenities, setSelectedAmenities] = useState<number[]>([]);
+  const [priceFrom, setPriceFrom] = useState<string>('');
+  const [priceTo, setPriceTo] = useState<string>('');
+  const [showFilters, setShowFilters] = useState<boolean>(false);
+
+  useEffect(() => {
+    fetch('http://localhost:3000/amenities', { credentials: 'include' })
+      .then(res => res.json())
+      .then(setAmenitiesList)
+      .catch(() => setAmenitiesList([]));
+  }, []);
 
   const handleDelete = async (id: number) => {
     if (!window.confirm('Удалить это пространство?')) return;
@@ -66,6 +79,20 @@ export default function SpacesListPage() {
       });
   }, []);
 
+  // Compute filteredSpaces
+  const filteredSpaces = spaces.filter(space => {
+    // match selected amenities
+    const hasAll = selectedAmenities.every(id =>
+      space.amenities.some(a => a.amenity_id === id && a.is_available)
+    );
+    // match price range
+    const price = space.price_per_hour;
+    const from = priceFrom ? parseFloat(priceFrom) : 0;
+    const to = priceTo ? parseFloat(priceTo) : Infinity;
+    const inPrice = price >= from && price <= to;
+    return hasAll && inPrice;
+  });
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -92,8 +119,74 @@ export default function SpacesListPage() {
           </Link>
         )}
       </div>
+      <button
+        onClick={() => setShowFilters(prev => !prev)}
+        className="btn btn-secondary mb-4"
+      >
+        {showFilters ? 'Скрыть фильтры' : 'Показать фильтры'}
+      </button>
+      <div className={`filters mb-6 grid grid-cols-3 gap-4 ${showFilters ? 'filters-visible' : 'filters-hidden'}`}>
+        {/* Amenities filter */}
+        <div className="filter-group amenities-filter">
+          <div className="font-semibold mb-2">Удобства:</div>
+          {amenitiesList.map(a => {
+            // Some APIs return `id`, others `amenity_id`
+            const amenityId = (a as any).amenity_id ?? (a as any).id;
+            const checkboxId = `amenity-${amenityId}`;
+            return (
+              <label key={amenityId} htmlFor={checkboxId} className="inline-flex items-center mr-4">
+                <input
+                  id={checkboxId}
+                  type="checkbox"
+                  className="mr-1"
+                  checked={selectedAmenities.includes(amenityId)}
+                  onChange={() => {
+                    setSelectedAmenities(prev =>
+                      prev.includes(amenityId)
+                        ? prev.filter(x => x !== amenityId)
+                        : [...prev, amenityId]
+                    );
+                  }}
+                />
+                {a.name}
+              </label>
+            );
+          })}
+        </div>
+        {/* Price filter */}
+        <div className="filter-group flex items-center space-x-2">
+          <span className="font-semibold">Цена:</span>
+          <input
+            type="number"
+            placeholder="от"
+            className="border rounded px-2 py-1 w-24"
+            value={priceFrom}
+            onChange={e => {
+              const raw = e.target.value;
+              const formatted = raw.length > 1 && raw.startsWith('0')
+                ? raw.substring(1)
+                : raw;
+              setPriceFrom(formatted);
+            }}
+          />
+          <span>—</span>
+          <input
+            type="number"
+            placeholder="до"
+            className="border rounded px-2 py-1 w-24"
+            value={priceTo}
+            onChange={e => {
+              const raw = e.target.value;
+              const formatted = raw.length > 1 && raw.startsWith('0')
+                ? raw.substring(1)
+                : raw;
+              setPriceTo(formatted);
+            }}
+          />
+        </div>
+      </div>
       <div className="coworkings-grid">
-        {spaces.map((space) => (
+        {filteredSpaces.map((space) => (
           <div
             key={space.id}
             className="coworking-card cursor-pointer"
@@ -147,7 +240,7 @@ export default function SpacesListPage() {
       </div>
       {selectedSpace && (
         <div
-          className="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+          className="modal modal-visible fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
           onClick={() => {
             setSelectedSpace(null);
             document.body.classList.remove('modal-open');

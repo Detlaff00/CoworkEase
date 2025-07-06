@@ -20,6 +20,12 @@ export default function AdminBookingsPage() {
   const [filterEmail, setFilterEmail] = useState<string>('');
   const [filterSpace, setFilterSpace] = useState<string>('');
 
+  // Format cost in rubles without decimals
+  const formatCost = (cost: number) =>
+    cost.toLocaleString('ru-RU', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }) + ' ₽';
 
   useEffect(() => {
     fetch('http://localhost:3000/admin/bookings', {
@@ -83,7 +89,7 @@ export default function AdminBookingsPage() {
                       : '—'}
                   </td>
                   <td className="px-4 py-2">
-                    {typeof b.cost === 'number' ? `${b.cost.toFixed(2)} ₽` : '—'}
+                    {b.cost != null ? formatCost(b.cost) : '—'}
                   </td>
                 </tr>
               ))}

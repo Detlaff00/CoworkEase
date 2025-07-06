@@ -61,6 +61,18 @@ export default function BookingForm() {
       return opts;
     }, []);
 
+    // Disable past times if booking for today (using local time)
+    const now = new Date();
+    const todayStr = [
+      now.getFullYear(),
+      String(now.getMonth() + 1).padStart(2, '0'),
+      String(now.getDate()).padStart(2, '0')
+    ].join('-');
+    const currentTime = [
+      String(now.getHours()).padStart(2, '0'),
+      String(now.getMinutes()).padStart(2, '0')
+    ].join(':'); // "HH:MM" in local time
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         if (!spaceId || !startTime || !endTime || !date) {
@@ -176,9 +188,14 @@ export default function BookingForm() {
                       required
                     >
                       <option value="">Выберите время</option>
-                      {timeOptions.map(t => (
-                        <option key={t} value={t}>{t}</option>
-                      ))}
+                      {timeOptions
+                        .filter(t => !(date === todayStr && t <= currentTime))
+                        .map(t => (
+                          <option key={t} value={t}>
+                            {t}
+                          </option>
+                        ))
+                      }
                     </select>
                   </div>
                   <div className="form-group">
@@ -190,9 +207,14 @@ export default function BookingForm() {
                       required
                     >
                       <option value="">Выберите время</option>
-                      {timeOptions.map(t => (
-                        <option key={t} value={t}>{t}</option>
-                      ))}
+                      {timeOptions
+                        .filter(t => !(date === todayStr && t <= currentTime))
+                        .map(t => (
+                          <option key={t} value={t}>
+                            {t}
+                          </option>
+                        ))
+                      }
                     </select>
                   </div>
                 </div>

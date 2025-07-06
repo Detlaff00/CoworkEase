@@ -20,7 +20,7 @@
   background: var(--accent);
 }
 .bookings-table thead th {
-  color: #fff;
+  color: var(--bg-primary);
 }
 
 .bookings-table thead th:first-child {
@@ -36,7 +36,7 @@
 
 .bookings-table tbody tr:hover {
   background: var(--accent-hover);
-  color: #fff;
+  color: var(--bg-primary);
 }
 
 .bookings-table tbody tr:last-child td:first-child {
