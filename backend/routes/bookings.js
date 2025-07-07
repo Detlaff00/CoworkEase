@@ -22,9 +22,11 @@ router.post('/', auth, validate(bookingSchema), async (req, res) => {
 
   const startTimeOnly = start_time.split('T')[1];
   const endTimeOnly = end_time.split('T')[1];
+  const client = await pool.connect();
   try {
+    await client.query('BEGIN');
     // Проверка пересечений: есть ли уже бронь в этом интервале
-    const conflict = await pool.query(
+    const conflict = await client.query(
       `SELECT id FROM bookings
        WHERE space_id = $1
          AND status <> 'cancelled'
@@ -33,14 +35,16 @@ router.post('/', auth, validate(bookingSchema), async (req, res) => {
       [space_id, booking_date, startTimeOnly, endTimeOnly]
     );
     if (conflict.rows.length) {
+      await client.query('ROLLBACK');
       return res.status(409).json({ error: 'Выбранное время уже занято' });
     }
     // Calculate cost based on space price_per_hour
-    const spaceRes = await pool.query(
+    const spaceRes = await client.query(
       'SELECT price_per_hour FROM spaces WHERE id = $1',
       [space_id]
     );
     if (!spaceRes.rows.length) {
+      await client.query('ROLLBACK');
       return res.status(404).json({ error: 'Пространство не найдено' });
     }
     const pricePerHour = parseFloat(spaceRes.rows[0].price_per_hour);
@@ -50,16 +54,20 @@ router.post('/', auth, validate(bookingSchema), async (req, res) => {
     const durationHours = (endDate - startDate) / 1000 / 3600;
     const cost = parseFloat((durationHours * pricePerHour).toFixed(2));
     // Вставляем новую бронь
-    const result = await pool.query(
+    const result = await client.query(
       `INSERT INTO bookings (space_id, user_id, booking_date, start_time, end_time, cost)
        VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING *;`,
       [space_id, req.user.id, booking_date, startTimeOnly, endTimeOnly, cost]
     );
+    await client.query('COMMIT');
     res.status(201).json(result.rows[0]);
   } catch (err) {
+    await client.query('ROLLBACK');
     console.error('Booking create error:', err.stack);
     res.status(500).json({ error: err.message });
+  } finally {
+    client.release();
   }
 });
 
